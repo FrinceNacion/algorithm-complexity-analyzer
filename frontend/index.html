@@ -11,14 +11,20 @@
     <select id="algorithm">
         <option value="bubble">Bubble Sort</option>
         <option value="merge">Merge Sort</option>
+        <option value="binary_search">Binary Search</option>
+        <option value="linear_search">Linear Search</option>
+        <option value="fib_recursive">Fibonacci (Recursive)</option>
+        <option value="fib_dp">Fibonacci (Dynamic Programming)</option>
     </select>
 
-    <input type="number" id="size" placeholder="Input Size">
+    <input type="number" id="size" placeholder="Input Size / N">
 
     <button onclick="runAlgorithm()">Run</button>
 
     <p id="result"></p>
 
+    <!-- Scripts -->
+    <script src="algorithms.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
