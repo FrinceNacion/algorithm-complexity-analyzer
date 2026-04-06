@@ -1,7 +1,8 @@
 # Algorithm Complexity Analyzer (Web-Based)
 
 ## Project Title
-Web-Based Algorithm Complexity Analyzer Using JavaScript and PHP for College-Level Algorithm Education
+Web-Based Algorithm Complexity Analyzer Using JavaScript and PHP for Dr. Yanga's College Inc. Algorithm Education
+
 
 ---
 
