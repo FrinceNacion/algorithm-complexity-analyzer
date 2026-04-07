@@ -58,8 +58,8 @@ function runAlgorithm() {
     const runAlgo = () => {
         if (algo === "bubble") Algorithms.bubbleSort(arr);
         if (algo === "merge") Algorithms.mergeSort(arr);
-        if (algo === "linear_search") Algorithms.linearSearch(arr, target);
-        if (algo === "binary_search") Algorithms.binarySearch(arr, target);
+        if (algo === "linear_search") Algorithms.linearSearch(arr, arr.length - 1); // worst case: search for last element
+        if (algo === "binary_search") Algorithms.binarySearch(arr, arr.length - 1); // worst case: search for last element
         if (algo === "fib_recursive") Algorithms.fibonacciRecursive(size);
         if (algo === "fib_dp") Algorithms.fibonacciDP(size);
     };
