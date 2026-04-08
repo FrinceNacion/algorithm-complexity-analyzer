@@ -31,7 +31,7 @@ The team leader will send a contributor invite to the team - accept it.
 Download the project to your computer. Run this once in a folder where you want to store the project:
 
 ```bash
-git clone https://github.com/<team-username>/<repo-name>.git
+git clone https://github.com/FrinceNacion/algorithm-complexity-analyzer.git
 cd <repo-name>
 ```
 
