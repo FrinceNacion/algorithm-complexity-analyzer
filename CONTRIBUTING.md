@@ -22,7 +22,7 @@ git config --global user.email "you@email.com"
 
 ## Step 3 — Get added to the repository
 
-Tell the Project Manager your GitHub username so they can add you as a collaborator on the repo. You'll receive an email invite — accept it.
+The team leader will send a contributor invite to the team - accept it.
 
 ---
 
