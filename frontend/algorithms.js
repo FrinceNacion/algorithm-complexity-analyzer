@@ -4,16 +4,16 @@ class Algorithms {
      * Time: O(n²)
      * Space: O(1)
      */
-    static bubbleSort(arr) {
-        let n = arr.length;
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j < n - i - 1; j++) {
+    static bubbleSort(array) {
+        let index = arr.length;
+        for (let i = 0; i < index; i++) {
+            for (let j = 0; j < index - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
                     [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
                 }
             }
         }
-        return arr;
+        return array;
     }
 
     /**
@@ -21,12 +21,12 @@ class Algorithms {
      * Time: O(n log n)
      * Space: O(n)
      */
-    static mergeSort(arr) {
-        if (arr.length <= 1) return arr;
+    static mergeSort(array) {
+        if (array.length <= 1) return array;
 
-        const mid = Math.floor(arr.length / 2);
-        const left = Algorithms.mergeSort(arr.slice(0, mid));
-        const right = Algorithms.mergeSort(arr.slice(mid));
+        const mid = Math.floor(array.length / 2);
+        const left = Algorithms.mergeSort(array.slice(0, mid));
+        const right = Algorithms.mergeSort(array.slice(mid));
 
         return Algorithms._merge(left, right);
     }
@@ -47,9 +47,9 @@ class Algorithms {
      * Time: O(n)
      * Space: O(1)
      */
-    static linearSearch(arr, target) {
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] === target) return i;
+    static linearSearch(array, target) {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] === target) return i;
         }
         return -1;
     }
@@ -59,9 +59,9 @@ class Algorithms {
      * Time: O(log n)
      * Space: O(1)
      */
-    static binarySearch(arr, target) {
+    static binarySearch(array, target) {
         let left = 0;
-        let right = arr.length - 1;
+        let right = array.length - 1;
 
         while (left <= right) {
             let mid = Math.floor((left + right) / 2);
@@ -89,12 +89,12 @@ class Algorithms {
      */
     static fibonacciDP(n) {
         if (n <= 1) return n;
-        let dp = new Array(n + 1);
-        dp[0] = 0;
-        dp[1] = 1;
+        let dynamic_programming = new Array(n + 1);
+        dynamic_programming[0] = 0;
+        dynamic_programming[1] = 1;
         for (let i = 2; i <= n; i++) {
-            dp[i] = dp[i - 1] + dp[i - 2];
+            dynamic_programming[i] = dynamic_programming[i - 1] + dynamic_programming[i - 2];
         }
-        return dp[n];
+        return dynamic_programming[n];
     }
 }
