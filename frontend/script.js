@@ -42,7 +42,7 @@ function runAlgorithm() {
     if (!algo.startsWith("fib_")) {
         arr = Array.from({ length: size }, () => Math.floor(Math.random() * size));
         if (algo === "binary_search") {
-            arr.sort((a, b) => a - b);
+            arr.sort((a, b) => a - b); // sort the randomly arranged array since bsearch requires sorted data
         }
         // Use an element not in the random array to test worst-case time
         // Array numbers are 0 to size-1, so -1 will never exist
