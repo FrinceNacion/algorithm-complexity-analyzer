@@ -1,21 +1,30 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "aco_db");
+require_once __DIR__ . '/connect_db.php';
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$data = json_decode(file_get_contents('php://input'), true);
+if (!is_array($data)) {
+    http_response_code(400);
+    exit();
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
+$size = $data['size'] ?? null;
+$time = $data['time'] ?? null;
+$algo = $data['algorithm'] ?? null;
+$space = $data['space'] ?? null;
 
-$size = $data['size'];
-$time = $data['time'];
-$algo = $data['algo'];
-$space = $data['space'];
+if ($size === null || $time === null || $algo === null || $space === null) {
+    http_response_code(400);
+    die('Missing required fields');
+}
 
-$sql = "INSERT INTO results (input_size, execution_time, algorithm, space_used)
-        VALUES ('$size', '$time', '$algo', '$space')";
+$stmt = $pdo->prepare('INSERT INTO results (input_size, execution_time, algorithm, space_used) VALUES (:size, :time, :algo, :space)');
+$stmt->execute([
+    ':size' => $size,
+    ':time' => $time,
+    ':algo' => $algo,
+    ':space' => $space,
+]);
 
-$conn->query($sql);
-
-$conn->close();
+http_response_code(201);
+echo json_encode(['success' => true, 'message' => 'Saved']);
 ?>
