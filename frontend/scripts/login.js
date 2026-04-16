@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const data = await postJson(LOGINENDPOINT, { email, password });
             alert(`Welcome back, ${data.user.name}!`);
-            window.location.href = 'index.html';
+            window.location.href = 'main.html';
         } catch (error) {
             alert(error.message);
         } finally {
