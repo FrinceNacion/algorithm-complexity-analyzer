@@ -1,30 +1,58 @@
 <?php
-require_once __DIR__ . '/connect_db.php';
+header("Access-Control-Allow-Origin: http://127.0.0.1:3000");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header('Content-Type: application/json');
 
-$data = json_decode(file_get_contents('php://input'), true);
-if (!is_array($data)) {
-    http_response_code(400);
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    echo json_encode(['message' => 'Preflight check successful']);
     exit();
 }
 
-$size = $data['size'] ?? null;
-$time = $data['time'] ?? null;
-$algo = $data['algorithm'] ?? null;
-$space = $data['space'] ?? null;
+session_start();
 
-if ($size === null || $time === null || $algo === null || $space === null) {
-    http_response_code(400);
-    die('Missing required fields');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit();
 }
 
-$stmt = $pdo->prepare('INSERT INTO results (input_size, execution_time, algorithm, space_used) VALUES (:size, :time, :algo, :space)');
-$stmt->execute([
-    ':size' => $size,
-    ':time' => $time,
-    ':algo' => $algo,
-    ':space' => $space,
-]);
+require_once 'authenticate.php';
 
-http_response_code(201);
-echo json_encode(['success' => true, 'message' => 'Saved']);
-?>
+require_once 'connect_db.php';
+
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (!$input) {
+    http_response_code(400);
+    echo json_encode(["success" => false, "error" => "Invalid JSON"]);
+    exit();
+}
+
+$user_id = $input['userId'] ?? null;
+$size = $input['size'] ?? null;
+$time = $input['time'] ?? null;
+$algorithm = $input['algorithm'] ?? null;
+$space = $input['space'] ?? null;
+
+if ($user_id === null || $size === null || $time === null || $algorithm === null || $space === null) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Missing required fields']);
+    exit();
+}
+
+$stmt = $pdo->prepare('INSERT INTO results ( user_id, input_size, execution_time, algorithm, space_used) VALUES (:user_id, :size, :time, :algorithm, :space)');
+$stmt->bindParam(':user_id', $user_id);
+$stmt->bindParam(':size', $size);
+$stmt->bindParam(':time', $time);
+$stmt->bindParam(':algorithm', $algorithm);
+$stmt->bindParam(':space', $space);
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Saved']);
+}else{
+    http_response_code(501);
+    echo json_encode(['success' => false, 'message' => 'Failed to save']);
+}
