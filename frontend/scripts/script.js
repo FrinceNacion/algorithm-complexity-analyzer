@@ -1,3 +1,16 @@
+async function authenticateUser() {
+    const getUserEndpoint = "http://localhost/algorithm-complexity-analyzer/backend/get_user.php";
+    const response  = await fetch(getUserEndpoint, { method: "POST", credentials: "include" });
+    const data = await response.json().catch(() => ({ error: 'Invalid server response' }));
+
+    if (!response.ok || data.success === false || data.error) {
+        window.location.href = 'login.html';
+    } else {
+        console.log("Authenticated user:", data.user);
+        return data.user.id; // Return user ID if needed for saving results
+    }
+}
+
 function getComplexity(algorithm) {
     const map = {
         bubble: { time: "O(n²)", space: "O(1)" },
@@ -21,7 +34,7 @@ function estimateSpace(algorithm, size) {
     return size * 8;
 }
 
-function runAlgorithm() {
+async function runAlgorithm() {
     let size_input = document.getElementById("size").value;
     if (!size_input || isNaN(size_input)) {
         alert("Please enter a valid input size.");
@@ -60,8 +73,8 @@ function runAlgorithm() {
         if (algorithm === "merge") Algorithms.mergeSort(array);
         if (algorithm === "linear_search") Algorithms.linearSearch(array, array.length - 1); // worst case: search for last element
         if (algorithm === "binary_search") Algorithms.binarySearch(array, array.length - 1); // worst case: search for last element
-        if (algorithm === "fib_recursive") Algorithms.fibonacciRecursive(size);
-        if (algorithm === "fib_dp") Algorithms.fibonacciDP(size);
+        if (algorithm === "fibonacci_recursive") Algorithms.fibonacciRecursive(size);
+        if (algorithm === "fibonacci_dynamic_programming") Algorithms.fibonacciDP(size);
     };
 
     let start = performance.now();
@@ -92,8 +105,10 @@ function runAlgorithm() {
             time = totalTime / iterations;
         }
     */
-    let complexity = getComplexity(algo);
-    let space = estimateSpace(algo, size);
+    let complexity = getComplexity(algorithm);
+    let space = estimateSpace(algorithm, size);
+    const saveEndpoint = "http://localhost/algorithm-complexity-analyzer/backend/save.php";
+    const userId = await authenticateUser(); // Ensure user is authenticated and get user ID if needed for saving results
 
     document.getElementById("result").innerText =
         `Execution Time: ${time.toFixed(4)} ms | ` + // using more decimals for microscopic measured times
@@ -102,9 +117,21 @@ function runAlgorithm() {
         `Estimated Space Used: ${space} bytes`;
 
     // Send data to backend
-    fetch("save.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ size, time, algorithm, space })
-    }).catch(error => console.log("Failed to save to backend (Not yet implemented):", error));
+
+    try{
+        const response = await fetch(saveEndpoint, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, size, time: time.toFixed(4), algorithm, space })
+        });
+        const data = await response.json().catch(() => ({ error: 'Invalid server response' }));
+        if (!response.ok || data.success === false || data.error) {
+            throw new Error(data.error || `Request failed with status ${response.status}`);
+        }
+
+        return data;
+    } catch (error) {
+        console.log("Failed to save to backend:", error);
+    }
 }
