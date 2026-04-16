@@ -5,11 +5,11 @@ class Algorithms {
      * Space: O(1)
      */
     static bubbleSort(array) {
-        let index = arr.length;
+        let index = array.length;
         for (let i = 0; i < index; i++) {
             for (let j = 0; j < index - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                if (array[j] > array[j + 1]) {
+                    [array[j], array[j + 1]] = [array[j + 1], array[j]];
                 }
             }
         }
@@ -65,8 +65,8 @@ class Algorithms {
 
         while (left <= right) {
             let mid = Math.floor((left + right) / 2);
-            if (arr[mid] === target) return mid;
-            else if (arr[mid] < target) left = mid + 1;
+            if (array[mid] === target) return mid;
+            else if (array[mid] < target) left = mid + 1;
             else right = mid - 1;
         }
         return -1;
