@@ -31,7 +31,7 @@ if (!$input) {
     exit();
 }
 
-$user_id = $input['userId'] ?? null;
+$user_id = $_SESSION['user_id']; // Get user ID from session, not from input
 $size = $input['size'] ?? null;
 $time = $input['time'] ?? null;
 $algorithm = $input['algorithm'] ?? null;
@@ -50,9 +50,14 @@ $stmt->bindParam(':time', $time);
 $stmt->bindParam(':algorithm', $algorithm);
 $stmt->bindParam(':space', $space);
 
-if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Saved']);
-}else{
-    http_response_code(501);
-    echo json_encode(['success' => false, 'message' => 'Failed to save']);
+try {
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Saved']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Failed to save']);
+    }
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
 }

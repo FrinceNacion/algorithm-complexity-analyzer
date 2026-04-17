@@ -1,3 +1,5 @@
+import { postJson } from './utils.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginView = document.getElementById('loginView');
     const registerView = document.getElementById('registerView');
@@ -23,25 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         registerView.style.display = 'none';
         loginView.style.display = 'block';
     });
-
-    async function postJson(endpoint, payload) {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload),
-            credentials: 'include'
-        });
-
-        const data = await response.json().catch(() => ({ error: 'Invalid server response' }));
-
-        if (!response.ok || data.success === false || data.error) {
-            throw new Error(data.error || `Request failed with status ${response.status}`);
-        }
-
-        return data;
-    }
 
     function setButtonState(button, text, disabled = true) {
         button.disabled = disabled;
