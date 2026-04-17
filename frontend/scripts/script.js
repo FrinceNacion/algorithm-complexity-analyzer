@@ -71,6 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
     inputSizeNumber.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
         const val = parseInt(e.target.value);
+        if (val > 100000) { 
+            inputSize = 100000;
+            updateInputSizeLabel();
+            return;
+        }
         if (!isNaN(val) && val >= 1) {
             inputSize = val;
             updateInputSizeLabel();
