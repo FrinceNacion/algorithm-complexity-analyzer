@@ -1,4 +1,4 @@
-import { postJson } from './util.js';
+import { postJson } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginView = document.getElementById('loginView');

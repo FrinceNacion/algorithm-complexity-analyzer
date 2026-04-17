@@ -1,4 +1,4 @@
-import { authenticateUser, postJson } from './util.js';
+import { authenticateUser, postJson } from './utils.js';
 document.addEventListener('DOMContentLoaded', () => {
     const runButton = document.getElementById('runBtn');
 
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let complexity = getComplexity(algorithm);
         let space = estimateSpace(algorithm, size);
         const SAVEENDPOINT = "http://localhost/algorithm-complexity-analyzer/backend/save.php";
-        const userId = await authenticateUser(); // Ensure user is authenticated and get user ID if needed for saving results
+        await authenticateUser(); // Ensure user is authenticated (user ID comes from session)
 
         document.getElementById("result").innerText =
             `Execution Time: ${time.toFixed(4)} ms | ` + // using more decimals for microscopic measured times
@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Send data to backend
         try {
-            await postJson(SAVEENDPOINT, { userId, size, time: time.toFixed(4), algorithm, space });
+            time = parseFloat(time) ;
+            await postJson(SAVEENDPOINT, { size, time, algorithm, space });
         } catch (error) {
             console.log("Failed to save to backend:", error);
         }
