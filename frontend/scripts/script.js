@@ -1,18 +1,58 @@
 import { authenticateUser, postJson } from './utils.js';
-document.addEventListener('DOMContentLoaded', () => {
-    const runButton = document.getElementById('runBtn');
+import { algorithms } from './algorithms.js';
 
-    function getComplexity(algorithm) {
-        const map = {
-            bubble: { time: "O(n²)", space: "O(1)" },
-            merge: { time: "O(n log n)", space: "O(n)" },
-            linear_search: { time: "O(n)", space: "O(1)" },
-            binary_search: { time: "O(log n)", space: "O(1)" },
-            fibonacci_recursive: { time: "O(2ⁿ)", space: "O(n)" },
-            fibonacci_dynamic_programming: { time: "O(n)", space: "O(n)" }
-        };
-        return map[algorithm];
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    const algorithmsContainer = document.getElementById("algorithmsContainer");
+    const useManualInputToggle = document.getElementById("useManualInput");
+    const sliderView = document.getElementById("sliderView");
+    const manualInputView = document.getElementById("manualInputView");
+    const inputSizeLabel = document.getElementById("inputSizeLabel");
+    const inputSizeSlider = document.getElementById("inputSizeSlider");
+    const inputSizeNumber = document.getElementById("inputSizeNumber");
+    const selectedCountText = document.getElementById("selectedCountText");
+    const runBtn = document.getElementById("runBtn");
+    const runIcon = document.getElementById("runIcon");
+    const runText = document.getElementById("runText");
+
+    let selectedAlgorithms = new Set();
+    let inputSize = 1000;
+    let useManualInput = false;
+    let isAnalyzing = false;
+
+    // Group algorithms by category
+    /* Example output:
+        {
+            Sorting: [
+                { id: "1", name: "Bubble Sort", category: "Sorting" },
+                { id: "2", name: "Quick Sort", category: "Sorting" }
+            ],
+            Search: [
+                { id: "3", name: "Binary Search", category: "Search" }
+            ]
+        }
+    */
+    const groupedAlgorithms = algorithms.reduce((accumulator, algorithm) => {
+        if (!accumulator[algorithm.category]) {
+            accumulator[algorithm.category] = [];
+        }
+        accumulator[algorithm.category].push(algorithm);
+        return accumulator;
+    }, {});
+
+    // Toggle Input Mode
+    useManualInputToggle.addEventListener('change', (e) => {
+        useManualInput = e.target.checked;
+        if (useManualInput) {
+            sliderView.classList.add('d-none');
+            manualInputView.classList.remove('d-none');
+            inputSize = parseInt(inputSizeNumber.value) || 1000;
+        } else {
+            sliderView.classList.remove('d-none');
+            manualInputView.classList.add('d-none');
+            inputSize = parseInt(inputSizeSlider.value);
+        }
+        updateInputSizeLabel();
+    });
 
     function estimateSpace(algorithm, size) {
         if (algorithm === "bubble" || algorithm === "linear_search" || algorithm === "binary_search") {
@@ -23,6 +63,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return size * 32;
         }
         return size * 8;
+    }
+
+
+
+    /*function getComplexity(algorithm) {
+        const map = {
+            bubble: { time: "O(n²)", space: "O(1)" },
+            merge: { time: "O(n log n)", space: "O(n)" },
+            linear_search: { time: "O(n)", space: "O(1)" },
+            binary_search: { time: "O(log n)", space: "O(1)" },
+            fibonacci_recursive: { time: "O(2ⁿ)", space: "O(n)" },
+            fibonacci_dynamic_programming: { time: "O(n)", space: "O(n)" }
+        };
+        return map[algorithm];
     }
 
     async function runAlgorithm() {
@@ -92,5 +146,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    runButton.addEventListener('click', runAlgorithm);
+    runButton.addEventListener('click', runAlgorithm);*/
 });
