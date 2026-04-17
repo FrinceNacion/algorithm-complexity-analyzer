@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return accumulator;
     }, {});
 
+    function updateInputSizeLabel() {
+        inputSizeLabel.textContent = `Input Size: ${inputSize.toLocaleString()}`;
+    }
+
     // Toggle Input Mode
     useManualInputToggle.addEventListener('change', (e) => {
         useManualInput = e.target.checked;
@@ -52,6 +56,21 @@ document.addEventListener('DOMContentLoaded', () => {
             inputSize = parseInt(inputSizeSlider.value);
         }
         updateInputSizeLabel();
+    });
+
+    // Slider Change
+    inputSizeSlider.addEventListener('input', (e) => {
+        inputSize = parseInt(e.target.value);
+        updateInputSizeLabel();
+    });
+
+    // Number Input Change
+    inputSizeNumber.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value);
+        if (!isNaN(val) && val >= 1) {
+            inputSize = val;
+            updateInputSizeLabel();
+        }
     });
 
     function estimateSpace(algorithm, size) {
