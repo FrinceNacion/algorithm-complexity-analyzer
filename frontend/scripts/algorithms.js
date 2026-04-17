@@ -134,3 +134,133 @@ function factorial(n) {
   if (n <= 1) return 1;
   return n * factorial(n - 1);
 }
+
+export const algorithms = [
+  {
+    id: "bubble-sort",
+    name: "Bubble Sort",
+    category: "Sorting",
+    description: "Simplest implementation, slowest performance.",
+    timeComplexity: "O(n²)",
+    spaceComplexity: "O(1)",
+    execute: (size) => {
+      const arr = generateRandomArray(size);
+      const time = measureExecution(() => bubbleSort(arr));
+      const memory = estimateMemory("O(1)", size);
+      return { time, space: "O(1)", memory };
+    },
+  },
+  {
+    id: "quick-sort",
+    name: "Quick Sort",
+    category: "Sorting",
+    description: "Fast average case, minimal memory overhead.",
+    timeComplexity: "O(n log n)",
+    spaceComplexity: "O(log n)",
+    execute: (size) => {
+      const arr = generateRandomArray(size);
+      const time = measureExecution(() => quickSort(arr));
+      const memory = estimateMemory("O(log n)", size);
+      return { time, space: "O(log n)", memory };
+    },
+  },
+  {
+    id: "merge-sort",
+    name: "Merge Sort",
+    category: "Sorting",
+    description: "Guaranteed performance, high memory usage.",
+    timeComplexity: "O(n log n)",
+    spaceComplexity: "O(n)",
+    execute: (size) => {
+      const arr = generateRandomArray(size);
+      const time = measureExecution(() => mergeSort(arr));
+      const memory = estimateMemory("O(n)", size);
+      return { time, space: "O(n)", memory };
+    },
+  },
+  {
+    id: "insertion-sort",
+    name: "Insertion Sort",
+    category: "Sorting",
+    description: "Adaptive, excellent for nearly sorted data.",
+    timeComplexity: "O(n²)",
+    spaceComplexity: "O(1)",
+    execute: (size) => {
+      const arr = generateRandomArray(size);
+      const time = measureExecution(() => insertionSort(arr));
+      const memory = estimateMemory("O(1)", size);
+      return { time, space: "O(1)", memory };
+    },
+  },
+  {
+    id: "linear-search",
+    name: "Linear Search",
+    category: "Searching",
+    description: "No preprocessing required, scales linearly.",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(1)",
+    execute: (size) => {
+      const arr = generateRandomArray(size);
+      const target = arr[Math.floor(Math.random() * size)];
+      const time = measureExecution(() => linearSearch(arr, target));
+      const memory = estimateMemory("O(1)", size);
+      return { time, space: "O(1)", memory };
+    },
+  },
+  {
+    id: "binary-search",
+    name: "Binary Search",
+    category: "Searching",
+    description: "Logarithmic speed, requires sorted input.",
+    timeComplexity: "O(log n)",
+    spaceComplexity: "O(1)",
+    execute: (size) => {
+      const arr = generateRandomArray(size).sort((a, b) => a - b);
+      const target = arr[Math.floor(Math.random() * size)];
+      const time = measureExecution(() => binarySearch(arr, target));
+      const memory = estimateMemory("O(1)", size);
+      return { time, space: "O(1)", memory };
+    },
+  },
+  {
+    id: "fibonacci-recursive",
+    name: "Fibonacci (Recursive)",
+    category: "Mathematical",
+    description: "Exponential time, recalculates same values.",
+    timeComplexity: "O(2ⁿ)",
+    spaceComplexity: "O(n)",
+    execute: (size) => {
+      const n = Math.min(size, 40);
+      const time = measureExecution(() => fibonacciRecursive(n));
+      const memory = estimateMemory("O(n)", n);
+      return { time, space: "O(n)", memory };
+    },
+  },
+  {
+    id: "fibonacci-iterative",
+    name: "Fibonacci (Iterative)",
+    category: "Mathematical",
+    description: "Linear time, constant space usage.",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(1)",
+    execute: (size) => {
+      const time = measureExecution(() => fibonacciIterative(size));
+      const memory = estimateMemory("O(1)", size);
+      return { time, space: "O(1)", memory };
+    },
+  },
+  {
+    id: "factorial",
+    name: "Factorial",
+    category: "Mathematical",
+    description: "Uses call stack, linear complexity.",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(n)",
+    execute: (size) => {
+      const n = Math.min(size, 170);
+      const time = measureExecution(() => factorial(n));
+      const memory = estimateMemory("O(n)", n);
+      return { time, space: "O(n)", memory };
+    },
+  },
+];
