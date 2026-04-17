@@ -1,4 +1,5 @@
 import { authenticateUser, postJson } from './utils.js';
+import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
 import { algorithms } from './algorithms.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -42,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return accumulator;
     }, {});
 
+    // Render algorithm checkboxes
+    renderAlgorithmsCheckbox(groupedAlgorithms);
+
     function updateInputSizeLabel() {
         inputSizeLabel.textContent = `Input Size: ${inputSize.toLocaleString()}`;
     }
@@ -71,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inputSizeNumber.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
         const val = parseInt(e.target.value);
-        if (val > 100000) { 
+        if (val > 100000) {
             inputSize = 100000;
             updateInputSizeLabel();
             return;
