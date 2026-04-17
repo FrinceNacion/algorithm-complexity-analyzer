@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const runBtn = document.getElementById("runBtn");
     const runIcon = document.getElementById("runIcon");
     const runText = document.getElementById("runText");
-
+    
+    let checkedCounter = 0;
     let selectedAlgorithms = new Set();
     let inputSize = 1000;
     let useManualInput = false;
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, {});
 
     // Render algorithm checkboxes
-    renderAlgorithmsCheckbox(groupedAlgorithms);
+    renderAlgorithmsCheckbox(groupedAlgorithms, checkedCounter);
 
     function updateInputSizeLabel() {
         inputSizeLabel.textContent = `Input Size: ${inputSize.toLocaleString()}`;
