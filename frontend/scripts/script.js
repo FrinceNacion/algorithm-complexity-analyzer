@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let useManualInput = false;
     let isAnalyzing = false;
 
+    // Normal state
+    useManualInputToggle.checked = useManualInput;
+
     // Group algorithms by category
     /* Example output:
         {
@@ -66,25 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Number Input Change
     inputSizeNumber.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
         const val = parseInt(e.target.value);
         if (!isNaN(val) && val >= 1) {
             inputSize = val;
             updateInputSizeLabel();
         }
     });
-
-    function estimateSpace(algorithm, size) {
-        if (algorithm === "bubble" || algorithm === "linear_search" || algorithm === "binary_search") {
-            return size * 8;
-        } else if (algorithm === "merge" || algorithm === "fibonacci_dynamic_programming") {
-            return size * 8 * 2;
-        } else if (algorithm === "fibonacci_recursive") {
-            return size * 32;
-        }
-        return size * 8;
-    }
-
-
 
     /*function getComplexity(algorithm) {
         const map = {
