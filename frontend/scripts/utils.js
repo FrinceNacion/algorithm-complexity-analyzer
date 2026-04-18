@@ -24,10 +24,10 @@ export async function authenticateUser() {
     const response = await fetch(getUserEndpoint, { method: "POST", credentials: "include" });
     const data = await response.json().catch(() => ({ error: 'Invalid server response' }));
 
-    if (!response.ok || data.success === false || data.error) {
-        window.location.href = 'login.html';
+    if (!data.success) {
+        window.location.href = 'index.html';
     } else {
         console.log("Authenticated user:", data.user);
-        return data.user.id;
+        return data.user;
     }
 }

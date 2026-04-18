@@ -3,6 +3,10 @@ import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
 import { algorithms } from './algorithms.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    // user authenticates by checking user_id in current session, if not, return to index (login/register)
+    const user = authenticateUser();
+
     const algorithmsContainer = document.getElementById("algorithmsContainer");
     const useManualInputToggle = document.getElementById("useManualInput");
     const sliderView = document.getElementById("sliderView");
