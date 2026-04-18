@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const runBtn = document.getElementById("runBtn");
     const runIcon = document.getElementById("runIcon");
     const runText = document.getElementById("runText");
-    
+
     let checkedCounter = 0;
     let selectedAlgorithms = new Set();
     let inputSize = 1000;
@@ -55,6 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
         inputSizeLabel.textContent = `Input Size: ${inputSize.toLocaleString()}`;
     }
 
+    function updateRunButtonState() {
+        selectedCountText.textContent = selectedAlgorithms.size;
+        runBtn.disabled = selectedAlgorithms.size === 0 || isAnalyzing;
+    }
+
     // Toggle Input Mode
     useManualInputToggle.addEventListener('change', (e) => {
         useManualInput = e.target.checked;
@@ -89,6 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
             inputSize = val;
             updateInputSizeLabel();
         }
+    });
+
+    // Event Listeners for checkboxes (for dynamic label)
+    const checkboxes = document.querySelectorAll('.algo-checkbox');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                selectedAlgorithms.add(e.target.value);
+            } else {
+                selectedAlgorithms.delete(e.target.value);
+            }
+            updateRunButtonState();
+        });
     });
 
     /*function getComplexity(algorithm) {
