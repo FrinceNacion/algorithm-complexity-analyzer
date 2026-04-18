@@ -59,3 +59,17 @@ body {
     background-color: white !important;
     margin-bottom: 1.5rem;
 }
+
+.algo-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.algo-item:hover {
+    background-color: #f8fafc;
+}
