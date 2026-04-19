@@ -8,7 +8,6 @@ let chartInstance = null;
 
 export function renderAnalysisResults(results) {
   const container = document.getElementById("resultsContainer");
-  if (!container) return;
 
   if (results.length === 0) {
     container.innerHTML = "";
