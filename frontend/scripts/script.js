@@ -109,6 +109,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Run Analysis
+    runBtn.addEventListener('click', async () => {
+        if (selectedAlgorithms.size === 0 || isAnalyzing) return;
+
+        isAnalyzing = true;
+        updateRunButtonState();
+
+        // UI Loading state
+        runIcon.setAttribute('data-lucide', 'loader-2');
+        runIcon.classList.add('animate-spin');
+        runIcon.style.animation = 'spin 1s linear infinite';
+        runText.textContent = 'Analyzing...';
+        if (window.lucide) window.lucide.createIcons();
+
+        // Clear previous results container
+        document.getElementById("resultsContainer").innerHTML = "";
+
+        // Small delay step to allow UI to render spinner
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const newResults = [];
+
+        const selectedIds = Array.from(selectedAlgorithms);
+        for (const algorithmId of selectedIds) {
+            const algorithm = algorithms.find((a) => a.id === algorithmId);
+            if (!algorithm) continue;
+
+            try {
+                const { time, space, memory } = algorithm.execute(inputSize);
+
+                const result = {
+                    id: `${Date.now()}-${algorithmId}`,
+                    algorithmName: algorithm.name,
+                    inputSize,
+                    executionTime: time,
+                    memoryUsage: memory,
+                    spaceComplexity: algorithm.spaceComplexity,
+                    timeComplexity: algorithm.timeComplexity,
+                    timestamp: Date.now(),
+                };
+
+                newResults.push(result);
+                // Save to history here
+            } catch (error) {
+                console.error(`Error running ${algorithm.name}:`, error);
+            }
+        }
+
+        // Render results here
+
+        isAnalyzing = false;
+        updateRunButtonState();
+
+        // Restore UI state
+        runIcon.setAttribute('data-lucide', 'play');
+        runIcon.style.animation = '';
+        runText.textContent = 'Run Analysis';
+        if (window.lucide) window.lucide.createIcons();
+    });
     /*function getComplexity(algorithm) {
         const map = {
             bubble: { time: "O(n²)", space: "O(1)" },
