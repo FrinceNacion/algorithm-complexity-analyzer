@@ -1,5 +1,6 @@
 import { authenticateUser, postJson } from './utils.js';
 import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
+import { renderAnalysisResults } from './components/analysisResults.js';
 import { algorithms } from './algorithms.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -158,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Render results here
+        renderAnalysisResults(newResults);
 
         isAnalyzing = false;
         updateRunButtonState();
