@@ -32,64 +32,69 @@
             </div>
         </div>
     </nav>
-    <main class="container pt-4 pb-4 d-flex flex-row flex-wrap-reverse gap-4">
-        <div style="flex: 1 1 65%;" class="w-100">
-            <div class="card h-100">
-                <div class="card-header bg-white border-0 pt-3 pb-0">
-                    <h5 class="card-title fw-bold mb-0">Select Algorithms</h5>
-                    <p class="text-secondary mt-1" style="font-size: 0.75rem;">Select one algorithm to analyze, or up to two for comparison.</p>
-                </div>
-                <div class="card-body" id="algorithmsContainer">
-                    <!-- Algorithms injected via JS -->
+    <main class="container pt-4 pb-4 d-flex flex-column">
+        <div class="container pt-4 pb-4 d-flex flex-row flex-wrap-reverse gap-4">
+            <div style="flex: 1 1 65%;" class="w-100">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="card-title fw-bold mb-0">Select Algorithms</h5>
+                        <p class="text-secondary mt-1" style="font-size: 0.75rem;">Select one algorithm to analyze, or
+                            up to two for comparison.</p>
+                    </div>
+                    <div class="card-body" id="algorithmsContainer">
+                        <!-- Algorithms injected via JS -->
+                    </div>
                 </div>
             </div>
-        </div>
-        <div style="flex: 1 1 400px;" class="h-auto">
-            <div class="card h-100">
-                <div class="card-header bg-white border-0 pt-3 pb-0">
-                    <h5 class="card-title fw-bold">Configuration</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <label class="form-label fw-medium text-secondary mb-0" id="inputSizeLabel">
-                            Input Size: --
-                        </label>
-                        <div class="d-flex align-items-center gap-2 text-secondary">
-                            <i data-lucide="sliders-horizontal" style="width: 16px; height: 16px;"></i>
-                            <div class="form-check form-switch mb-0">
-                                <input class="form-check-input" type="checkbox" role="switch" id="useManualInput">
+            <div style="flex: 1 1 400px;" class="h-auto">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="card-title fw-bold">Configuration</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <label class="form-label fw-medium text-secondary mb-0" id="inputSizeLabel">
+                                Input Size: --
+                            </label>
+                            <div class="d-flex align-items-center gap-2 text-secondary">
+                                <i data-lucide="sliders-horizontal" style="width: 16px; height: 16px;"></i>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="useManualInput">
+                                </div>
+                                <i data-lucide="keyboard" style="width: 16px; height: 16px;"></i>
                             </div>
-                            <i data-lucide="keyboard" style="width: 16px; height: 16px;"></i>
                         </div>
-                    </div>
-                    <div id="sliderView">
-                        <input type="range" class="form-range mt-2" min="10" max="10000" step="10" id="inputSizeSlider"
-                            value="1000">
-                        <div class="d-flex justify-content-between text-secondary" style="font-size: 0.75rem;">
-                            <span>10</span>
-                            <span>10,000</span>
+                        <div id="sliderView">
+                            <input type="range" class="form-range mt-2" min="10" max="10000" step="10"
+                                id="inputSizeSlider" value="1000">
+                            <div class="d-flex justify-content-between text-secondary" style="font-size: 0.75rem;">
+                                <span>10</span>
+                                <span>10,000</span>
+                            </div>
                         </div>
-                    </div>
-                    <div id="manualInputView" class="d-none">
-                        <input type="number" class="form-control" id="inputSizeNumber" value="1000" min="1"
-                            placeholder="Enter input size">
-                        <p class="text-secondary mt-1" style="font-size: 0.75rem;">Enter any positive integer. <span class="text-danger">Warning: Input sizes above 10,000 may cause lag. (limit: 100,000)</span></p>
-                    </div>
-                    <div class="mt-4 mb-3 text-secondary text-sm">
-                        <strong id="selectedCountText">0</strong> algorithm(s) selected
-                    </div>
+                        <div id="manualInputView" class="d-none">
+                            <input type="number" class="form-control" id="inputSizeNumber" value="1000" min="1"
+                                placeholder="Enter input size">
+                            <p class="text-secondary mt-1" style="font-size: 0.75rem;">Enter any positive integer. <span
+                                    class="text-danger">Warning: Input sizes above 10,000 may cause lag. (limit:
+                                    100,000)</span></p>
+                        </div>
+                        <div class="mt-4 mb-3 text-secondary text-sm">
+                            <strong id="selectedCountText">0</strong> algorithm(s) selected
+                        </div>
 
-                    <button id="runBtn"
-                        class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2"
-                        disabled>
-                        <i data-lucide="play" id="runIcon" style="width: 16px; height: 16px;"></i>
-                        <span id="runText">Run Analysis</span>
-                    </button>
+                        <button id="runBtn"
+                            class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+                            disabled>
+                            <i data-lucide="play" id="runIcon" style="width: 16px; height: 16px;"></i>
+                            <span id="runText">Run Analysis</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Results Section -->
-        <div id="resultsContainer">
+        <div class="container pt-4 pb-4" id="resultsContainer">
             <!-- Injected by AnalysisResults.js -->
         </div>
     </main>
