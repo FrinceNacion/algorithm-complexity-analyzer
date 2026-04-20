@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Normal state
     useManualInputToggle.checked = useManualInput;
+    inputSizeSlider.value = 1000;
+    updateInputSizeLabel();
 
     // Group algorithms by category
     /* Example output:
