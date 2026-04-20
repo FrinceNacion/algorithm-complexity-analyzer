@@ -172,6 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
         runText.textContent = 'Run Analysis';
         if (window.lucide) window.lucide.createIcons();
     });
+
+    // Add keyframes for spinner if missing
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }`;
+    document.head.appendChild(style);
     /*function getComplexity(algorithm) {
         const map = {
             bubble: { time: "O(n²)", space: "O(1)" },
