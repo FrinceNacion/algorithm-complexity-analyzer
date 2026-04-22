@@ -41,7 +41,7 @@ export async function getBackendHistory() {
         algorithmName: row.algorithm,
         inputSize: row.input_size,
         executionTime: row.execution_time,
-        spaceComplexity: row.spaced_used,
+        memoryUsage: row.space_used,
         timestamp: new Date(row.created_at).getTime(),
         isBackend: true
       }));
@@ -68,4 +68,14 @@ export async function getCombinedHistory() {
     seen.add(item.id);
     return true;
   });
+}
+
+export function clearHistory() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+export function deleteFromHistory(id) {
+  const history = getHistory();
+  const filtered = history.filter(item => item.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
 }
