@@ -1,8 +1,13 @@
 import { getBackendHistory, clearHistory, deleteFromHistory } from "./storage.js";
 import { algorithms } from "./algorithms.js";
 import { formatBytes } from "./components/analysisResults.js";
+import { authenticateUser, postJson } from './utils.js';
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    // user authenticates by checking user_id in current session, if not, return to index (login/register)
+    const user = authenticateUser();
+
     const emptyState = document.getElementById("emptyState");
     const historyContent = document.getElementById("historyContent");
     const clearHistoryBtn = document.getElementById("clearHistoryBtn");
