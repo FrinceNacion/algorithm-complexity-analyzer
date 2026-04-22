@@ -1,4 +1,5 @@
 import { authenticateUser, postJson } from './utils.js';
+import { saveToHistory } from './storage.js';
 import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
 import { renderAnalysisResults } from './components/analysisResults.js';
 import { algorithms } from './algorithms.js';
@@ -155,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 newResults.push(result);
                 // Save to history here
+                saveToHistory(result);
             } catch (error) {
                 console.error(`Error running ${algorithm.name}:`, error);
             }
