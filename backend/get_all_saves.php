@@ -29,7 +29,7 @@ require_once 'connect_db.php';
 // Fetch all results for authenticated user
 try {
     $userId = $_SESSION['user_id']; 
-    $stmt = $pdo->prepare("SELECT id, input_size, execution_time, algorithm, spaced_used, created_at FROM results WHERE user_id = :user_id AND deleted_at IS NULL ORDER BY created_at DESC");
+    $stmt = $pdo->prepare("SELECT id, input_size, execution_time, algorithm, space_used, created_at FROM results WHERE user_id = :user_id AND deleted_at IS NULL ORDER BY created_at DESC");
     $stmt->execute(['user_id' => $userId]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
