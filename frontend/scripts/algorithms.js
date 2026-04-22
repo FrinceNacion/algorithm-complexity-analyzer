@@ -135,13 +135,27 @@ function factorial(n) {
   return n * factorial(n - 1);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Algorithm Registry
+// P0 ADDITION: Each algorithm now includes thetaComplexity (Θ) and
+// omegaComplexity (Ω) fields alongside the existing timeComplexity (O).
+//
+// Convention used:
+//   timeComplexity  → Big-O  (worst-case upper bound)
+//   thetaComplexity → Big-Θ  (tight / average-case bound)
+//   omegaComplexity → Big-Ω  (best-case lower bound)
+// ─────────────────────────────────────────────────────────────────────────────
+
 export const algorithms = [
+  // ── Sorting ────────────────────────────────────────────────────────────────
   {
     id: "bubble-sort",
     name: "Bubble Sort",
     category: "Sorting",
     description: "Simplest implementation, slowest performance.",
-    timeComplexity: "O(n²)",
+    timeComplexity:  "O(n²)",
+    thetaComplexity: "Θ(n²)",      // average: always performs ~n²/2 comparisons
+    omegaComplexity: "Ω(n)",       // best: already-sorted input, one pass only
     spaceComplexity: "O(1)",
     execute: (size) => {
       const arr = generateRandomArray(size);
@@ -155,7 +169,9 @@ export const algorithms = [
     name: "Quick Sort",
     category: "Sorting",
     description: "Fast average case, minimal memory overhead.",
-    timeComplexity: "O(n log n)",
+    timeComplexity:  "O(n log n)",  // average case (worst: O(n²) with poor pivot)
+    thetaComplexity: "Θ(n log n)", // tight average-case bound
+    omegaComplexity: "Ω(n log n)", // best case with ideal pivot selection
     spaceComplexity: "O(log n)",
     execute: (size) => {
       const arr = generateRandomArray(size);
@@ -168,8 +184,10 @@ export const algorithms = [
     id: "merge-sort",
     name: "Merge Sort",
     category: "Sorting",
-    description: "Guaranteed performance, high memory usage.",
-    timeComplexity: "O(n log n)",
+    description: "Guaranteed performance, higher memory usage.",
+    timeComplexity:  "O(n log n)",
+    thetaComplexity: "Θ(n log n)", // always the same regardless of input order
+    omegaComplexity: "Ω(n log n)", // no better case possible; always divides fully
     spaceComplexity: "O(n)",
     execute: (size) => {
       const arr = generateRandomArray(size);
@@ -183,7 +201,9 @@ export const algorithms = [
     name: "Insertion Sort",
     category: "Sorting",
     description: "Adaptive, excellent for nearly sorted data.",
-    timeComplexity: "O(n²)",
+    timeComplexity:  "O(n²)",
+    thetaComplexity: "Θ(n²)",      // average: random input requires ~n²/4 shifts
+    omegaComplexity: "Ω(n)",       // best: already-sorted input, only n−1 comparisons
     spaceComplexity: "O(1)",
     execute: (size) => {
       const arr = generateRandomArray(size);
@@ -192,12 +212,16 @@ export const algorithms = [
       return { time, space: "O(1)", memory };
     },
   },
+
+  // ── Searching ──────────────────────────────────────────────────────────────
   {
     id: "linear-search",
     name: "Linear Search",
     category: "Searching",
     description: "No preprocessing required, scales linearly.",
-    timeComplexity: "O(n)",
+    timeComplexity:  "O(n)",
+    thetaComplexity: "Θ(n)",       // average: target found around midpoint
+    omegaComplexity: "Ω(1)",       // best: target is the first element
     spaceComplexity: "O(1)",
     execute: (size) => {
       const arr = generateRandomArray(size);
@@ -212,7 +236,9 @@ export const algorithms = [
     name: "Binary Search",
     category: "Searching",
     description: "Logarithmic speed, requires sorted input.",
-    timeComplexity: "O(log n)",
+    timeComplexity:  "O(log n)",
+    thetaComplexity: "Θ(log n)",   // average: takes ~log n comparisons
+    omegaComplexity: "Ω(1)",       // best: target is the exact middle element
     spaceComplexity: "O(1)",
     execute: (size) => {
       const arr = generateRandomArray(size).sort((a, b) => a - b);
@@ -222,15 +248,19 @@ export const algorithms = [
       return { time, space: "O(1)", memory };
     },
   },
+
+  // ── Mathematical ───────────────────────────────────────────────────────────
   {
     id: "fibonacci-recursive",
     name: "Fibonacci (Recursive)",
     category: "Mathematical",
-    description: "Exponential time, recalculates same values.",
-    timeComplexity: "O(2ⁿ)",
+    description: "Exponential time, recalculates overlapping subproblems.",
+    timeComplexity:  "O(2ⁿ)",
+    thetaComplexity: "Θ(2ⁿ)",      // always exponential; no early exit
+    omegaComplexity: "Ω(2ⁿ)",      // no better case; recursion tree is always full
     spaceComplexity: "O(n)",
     execute: (size) => {
-      const n = Math.min(size, 40);
+      const n = Math.min(size, 40); // cap to prevent extreme runtimes
       const time = measureExecution(() => fibonacciRecursive(n));
       const memory = estimateMemory("O(n)", n);
       return { time, space: "O(n)", memory };
@@ -238,10 +268,12 @@ export const algorithms = [
   },
   {
     id: "fibonacci-iterative",
-    name: "Fibonacci (Iterative)",
+    name: "Fibonacci (DP / Iterative)",
     category: "Mathematical",
-    description: "Linear time, constant space usage.",
-    timeComplexity: "O(n)",
+    description: "Linear time via bottom-up dynamic programming (tabulation).",
+    timeComplexity:  "O(n)",
+    thetaComplexity: "Θ(n)",       // always performs exactly n−1 iterations
+    omegaComplexity: "Ω(n)",       // no early exit; always iterates to n
     spaceComplexity: "O(1)",
     execute: (size) => {
       const time = measureExecution(() => fibonacciIterative(size));
@@ -253,11 +285,13 @@ export const algorithms = [
     id: "factorial",
     name: "Factorial",
     category: "Mathematical",
-    description: "Uses call stack, linear complexity.",
-    timeComplexity: "O(n)",
+    description: "Linear recursion, uses call stack proportional to n.",
+    timeComplexity:  "O(n)",
+    thetaComplexity: "Θ(n)",       // always performs exactly n multiplications
+    omegaComplexity: "Ω(n)",       // no early exit path beyond base case
     spaceComplexity: "O(n)",
     execute: (size) => {
-      const n = Math.min(size, 170);
+      const n = Math.min(size, 170); // cap: n>170 causes Infinity in JS floats
       const time = measureExecution(() => factorial(n));
       const memory = estimateMemory("O(n)", n);
       return { time, space: "O(n)", memory };
