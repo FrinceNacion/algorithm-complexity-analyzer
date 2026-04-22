@@ -14,7 +14,7 @@ function measureExecution(algorithm) {
 // Estimate memory usage based on space complexity and input size
 function estimateMemory(spaceComplexity, size) {
   const BYTES_PER_NUMBER = 8; // JavaScript numbers are 64-bit floats
-  
+
   switch (spaceComplexity) {
     case "O(1)":
       return BYTES_PER_NUMBER * 10; // Small constant overhead
@@ -46,6 +46,67 @@ function bubbleSort(arr) {
   return array;
 }
 
+/**
+ * Returns the raw (unnormalized) theoretical growth value for a given
+ * complexity class at input size n. Used to generate the theoretical
+ * curve on the Theoretical vs. Empirical Growth chart.
+ *
+ * @param {string} complexityClass - e.g. "O(n)", "O(n log n)", "O(n²)"
+ * @param {number} n - Input size
+ * @returns {number}
+ */
+export function getTheoreticalValue(complexityClass, n) {
+  const safeN = Math.max(n, 2); // prevent log(0) / log(1) edge cases
+  switch (complexityClass) {
+    case "O(1)": return 1;
+    case "O(log n)": return Math.log2(safeN);
+    case "O(n)": return safeN;
+    case "O(n log n)": return safeN * Math.log2(safeN);
+    case "O(n²)": return safeN * safeN;
+    case "O(2ⁿ)": return Math.pow(2, Math.min(safeN, 40));
+    default: return safeN;
+  }
+}
+
+/**
+ * Collects empirical execution times at multiple evenly-spaced input sizes
+ * up to maxSize, by invoking the algorithm's existing execute() method.
+ * Used to populate the Theoretical vs. Empirical Growth chart.
+ *
+ * Special handling:
+ *  - Fibonacci (Recursive): growth chart samples are capped at n=35 to
+ *    avoid extreme runtimes caused by exponential growth.
+ *  - All others: samples span from ~20% of maxSize to maxSize in 5 steps.
+ *
+ * @param {object} algorithm - An algorithm object from the algorithms array
+ * @param {number} maxSize   - The user-configured input size
+ * @param {number} numPoints - Number of sample points (default: 5)
+ * @returns {Array<{size: number, time: number}>}
+ */
+export function collectGrowthData(algorithm, maxSize, numPoints = 5) {
+  // Fibonacci recursive is capped lower to keep sampling fast
+  const effectiveMax = algorithm.id === "fibonacci-recursive"
+    ? Math.min(maxSize, 35)
+    : maxSize;
+
+  // Ensure sizes are positive integers, starting from at least 10
+  const step = Math.max(1, Math.floor(effectiveMax / numPoints));
+  const sizes = Array.from({ length: numPoints }, (_, i) =>
+    Math.max(10, step * (i + 1))
+  );
+  // Always ensure the last point equals effectiveMax exactly
+  sizes[sizes.length - 1] = Math.max(10, effectiveMax);
+
+  return sizes.map((size) => {
+    try {
+      const { time } = algorithm.execute(size);
+      return { size, time };
+    } catch {
+      return { size, time: 0 };
+    }
+  });
+}
+
 function quickSort(arr) {
   if (arr.length <= 1) return arr;
   const pivot = arr[Math.floor(arr.length / 2)];
@@ -57,18 +118,18 @@ function quickSort(arr) {
 
 function mergeSort(arr) {
   if (arr.length <= 1) return arr;
-  
+
   const mid = Math.floor(arr.length / 2);
   const left = mergeSort(arr.slice(0, mid));
   const right = mergeSort(arr.slice(mid));
-  
+
   return merge(left, right);
 }
 
 function merge(left, right) {
   const result = [];
   let i = 0, j = 0;
-  
+
   while (i < left.length && j < right.length) {
     if (left[i] < right[j]) {
       result.push(left[i++]);
@@ -76,7 +137,7 @@ function merge(left, right) {
       result.push(right[j++]);
     }
   }
-  
+
   return result.concat(left.slice(i)).concat(right.slice(j));
 }
 
@@ -105,7 +166,7 @@ function linearSearch(arr, target) {
 function binarySearch(arr, target) {
   let left = 0;
   let right = arr.length - 1;
-  
+
   while (left <= right) {
     const mid = Math.floor((left + right) / 2);
     if (arr[mid] === target) return mid;
@@ -137,7 +198,7 @@ function factorial(n) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Algorithm Registry
-// P0 ADDITION: Each algorithm now includes thetaComplexity (Θ) and
+// Each algorithm now includes thetaComplexity (Θ) and
 // omegaComplexity (Ω) fields alongside the existing timeComplexity (O).
 //
 // Convention used:
@@ -153,7 +214,7 @@ export const algorithms = [
     name: "Bubble Sort",
     category: "Sorting",
     description: "Simplest implementation, slowest performance.",
-    timeComplexity:  "O(n²)",
+    timeComplexity: "O(n²)",
     thetaComplexity: "Θ(n²)",      // average: always performs ~n²/2 comparisons
     omegaComplexity: "Ω(n)",       // best: already-sorted input, one pass only
     spaceComplexity: "O(1)",
@@ -169,7 +230,7 @@ export const algorithms = [
     name: "Quick Sort",
     category: "Sorting",
     description: "Fast average case, minimal memory overhead.",
-    timeComplexity:  "O(n log n)",  // average case (worst: O(n²) with poor pivot)
+    timeComplexity: "O(n log n)",  // average case (worst: O(n²) with poor pivot)
     thetaComplexity: "Θ(n log n)", // tight average-case bound
     omegaComplexity: "Ω(n log n)", // best case with ideal pivot selection
     spaceComplexity: "O(log n)",
@@ -185,7 +246,7 @@ export const algorithms = [
     name: "Merge Sort",
     category: "Sorting",
     description: "Guaranteed performance, higher memory usage.",
-    timeComplexity:  "O(n log n)",
+    timeComplexity: "O(n log n)",
     thetaComplexity: "Θ(n log n)", // always the same regardless of input order
     omegaComplexity: "Ω(n log n)", // no better case possible; always divides fully
     spaceComplexity: "O(n)",
@@ -201,7 +262,7 @@ export const algorithms = [
     name: "Insertion Sort",
     category: "Sorting",
     description: "Adaptive, excellent for nearly sorted data.",
-    timeComplexity:  "O(n²)",
+    timeComplexity: "O(n²)",
     thetaComplexity: "Θ(n²)",      // average: random input requires ~n²/4 shifts
     omegaComplexity: "Ω(n)",       // best: already-sorted input, only n−1 comparisons
     spaceComplexity: "O(1)",
@@ -219,7 +280,7 @@ export const algorithms = [
     name: "Linear Search",
     category: "Searching",
     description: "No preprocessing required, scales linearly.",
-    timeComplexity:  "O(n)",
+    timeComplexity: "O(n)",
     thetaComplexity: "Θ(n)",       // average: target found around midpoint
     omegaComplexity: "Ω(1)",       // best: target is the first element
     spaceComplexity: "O(1)",
@@ -236,7 +297,7 @@ export const algorithms = [
     name: "Binary Search",
     category: "Searching",
     description: "Logarithmic speed, requires sorted input.",
-    timeComplexity:  "O(log n)",
+    timeComplexity: "O(log n)",
     thetaComplexity: "Θ(log n)",   // average: takes ~log n comparisons
     omegaComplexity: "Ω(1)",       // best: target is the exact middle element
     spaceComplexity: "O(1)",
@@ -255,7 +316,7 @@ export const algorithms = [
     name: "Fibonacci (Recursive)",
     category: "Mathematical",
     description: "Exponential time, recalculates overlapping subproblems.",
-    timeComplexity:  "O(2ⁿ)",
+    timeComplexity: "O(2ⁿ)",
     thetaComplexity: "Θ(2ⁿ)",      // always exponential; no early exit
     omegaComplexity: "Ω(2ⁿ)",      // no better case; recursion tree is always full
     spaceComplexity: "O(n)",
@@ -271,7 +332,7 @@ export const algorithms = [
     name: "Fibonacci (DP / Iterative)",
     category: "Mathematical",
     description: "Linear time via bottom-up dynamic programming (tabulation).",
-    timeComplexity:  "O(n)",
+    timeComplexity: "O(n)",
     thetaComplexity: "Θ(n)",       // always performs exactly n−1 iterations
     omegaComplexity: "Ω(n)",       // no early exit; always iterates to n
     spaceComplexity: "O(1)",
@@ -286,7 +347,7 @@ export const algorithms = [
     name: "Factorial",
     category: "Mathematical",
     description: "Linear recursion, uses call stack proportional to n.",
-    timeComplexity:  "O(n)",
+    timeComplexity: "O(n)",
     thetaComplexity: "Θ(n)",       // always performs exactly n multiplications
     omegaComplexity: "Ω(n)",       // no early exit path beyond base case
     spaceComplexity: "O(n)",
