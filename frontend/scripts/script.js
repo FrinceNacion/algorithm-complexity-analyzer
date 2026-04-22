@@ -2,7 +2,7 @@ import { authenticateUser, postJson } from './utils.js';
 import { saveToHistory } from './storage.js';
 import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
 import { renderAnalysisResults } from './components/analysisResults.js';
-import { algorithms } from './algorithms.js';
+import { algorithms, collectGrowthData } from './algorithms.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let useManualInput = false;
     let isAnalyzing = false;
 
-    // Normal state
+    // Initial UI state
     useManualInputToggle.checked = useManualInput;
     inputSizeSlider.value = 1000;
     updateInputSizeLabel();
@@ -89,6 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
     inputSizeNumber.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
         const val = parseInt(e.target.value);
+        if (val < 35) {
+            inputSize = 35;
+            updateInputSizeLabel();
+            return;
+        }
         if (val > 100000) {
             inputSize = 100000;
             updateInputSizeLabel();
@@ -143,14 +148,28 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const { time, space, memory } = algorithm.execute(inputSize);
 
+                // collectGrowthData runs the algorithm at 5 evenly-spaced input sizes
+                // up to inputSize, producing the data points needed for the
+                // Theoretical vs. Empirical Growth chart.
+                const growthData = collectGrowthData(algorithm, inputSize);
+
                 const result = {
                     id: `${Date.now()}-${algorithmId}`,
                     algorithmName: algorithm.name,
                     inputSize,
                     executionTime: time,
                     memoryUsage: memory,
+
+                    // ── P0 ADDITION: all three asymptotic notation fields ────────────
+                    timeComplexity: algorithm.timeComplexity,   // Big-O  (worst-case)
+                    thetaComplexity: algorithm.thetaComplexity,  // Big-Θ  (tight/avg)
+                    omegaComplexity: algorithm.omegaComplexity,  // Big-Ω  (best-case)
+
                     spaceComplexity: algorithm.spaceComplexity,
-                    timeComplexity: algorithm.timeComplexity,
+
+                    // ── P0 ADDITION: multi-point empirical data for growth chart ─────
+                    growthData,
+
                     timestamp: Date.now(),
                 };
 
