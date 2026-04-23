@@ -52,12 +52,16 @@ The system allows users to select algorithms, input problem sizes, execute imple
 ---
 
 ## Key Features
-- Algorithm selection interface
-- Input size configuration
-- Runtime measurement using high-resolution timing
-- Complexity classification (time and space)
-- Graph-based visualization of results
-- Persistent data storage
+- Algorithm selection interface with support for up to two simultaneous comparisons
+- Input size configuration via slider (10–10,000) or manual entry (1–100,000)
+- High-resolution runtime measurement using performance.now()
+- Complexity classification displaying Big-O (O), Big-Theta (Θ), and Big-Omega (Ω) notations for both time and space
+- Bar chart visualization for direct execution time comparison
+- Theoretical vs. Empirical Growth Chart — overlays measured execution times against a normalized theoretical complexity curve across multiple input sizes
+- Comparison summary with speed differential and memory differential metrics
+- Persistent data storage via MySQL backend
+- History module with algorithm filtering, column sorting, and per-row deletion
+
 
 ---
 
@@ -156,9 +160,14 @@ Sections:
 ---
 
 ## Notes and Limitations
-- Runtime results may vary depending on hardware and browser environment
-- Complexity classification is based on predefined mappings
-- Large input sizes may affect responsiveness
+- Runtime (empirical) results may vary depending on hardware, browser environment, and JavaScript engine optimization
+- Complexity classification is based on predefined theoretical mappings, not automated code analysis
+- Space complexity values are formula-based estimates and do not reflect actual low-level memory profiling
+- Algorithm comparison is limited to two algorithms per analysis run to preserve result clarity
+- Input size is configurable via slider (10–10,000) or manual entry (35–100,000); values above 10,000 may cause visible slowdowns for O(n²) and exponential algorithms
+- Fibonacci (Recursive) is automatically capped at n = 40 for the main execution measurement, and at n = 35 for growth chart - sampling, to prevent browser hang
+- The theoretical vs. empirical growth chart runs the algorithm at 5 sampled sizes; this may add 1–3 seconds of execution time for computationally intensive algorithms
+
 
 ---
 
