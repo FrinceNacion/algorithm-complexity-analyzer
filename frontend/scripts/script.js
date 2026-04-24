@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputSizeNumber = document.getElementById("inputSizeNumber");
     const selectedCountText = document.getElementById("selectedCountText");
     const runBtn = document.getElementById("runBtn");
-    const runIcon = document.getElementById("runIcon");
     const runText = document.getElementById("runText");
 
     let checkedCounter = 0;
@@ -62,6 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateRunButtonState() {
         selectedCountText.textContent = selectedAlgorithms.size;
         runBtn.disabled = selectedAlgorithms.size === 0 || isAnalyzing;
+    }
+
+    function getRunIcon() {
+        return document.getElementById('runIcon');
+    }
+
+    function getLoadingIcon() {
+        return document.getElementById('loadingIcon');
     }
 
     // Toggle Input Mode
@@ -126,17 +133,36 @@ document.addEventListener('DOMContentLoaded', () => {
         updateRunButtonState();
 
         // UI Loading state
-        runIcon.setAttribute('data-lucide', 'loader-2');
-        runIcon.classList.add('animate-spin');
-        runIcon.style.animation = 'spin 1s linear infinite';
+        const runIconNode = getRunIcon();
+        const loadingIconNode = getLoadingIcon();
+        if (!runIconNode || !loadingIconNode) return;
+
+        loadingIconNode.classList.remove('d-none');
+        runIconNode.classList.add('d-none');
+        loadingIconNode.style.animation = 'spin 1s linear infinite';
         runText.textContent = 'Analyzing...';
-        if (window.lucide) window.lucide.createIcons();
+
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }`;
+        document.head.appendChild(style);
 
         // Clear previous results container
         document.getElementById("resultsContainer").innerHTML = "";
 
         // Small delay step to allow UI to render spinner
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Restore UI state
+        document.head.removeChild(style);
+        loadingIconNode.style.animation = '';
+        runIconNode.classList.remove('d-none');
+        loadingIconNode.classList.add('d-none');
+        
+        runText.textContent = 'Run Analysis';
+        
 
         const newResults = [];
 
@@ -187,18 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
         isAnalyzing = false;
         updateRunButtonState();
 
-        // Restore UI state
-        runIcon.setAttribute('data-lucide', 'play');
-        runIcon.style.animation = '';
-        runText.textContent = 'Run Analysis';
-        if (window.lucide) window.lucide.createIcons();
     });
 
     // Add keyframes for spinner if missing
-    const style = document.createElement('style');
+    /*const style = document.createElement('style');
     style.innerHTML = `@keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }`;
-    document.head.appendChild(style);
+    document.head.appendChild(style);*/
+    
 });
