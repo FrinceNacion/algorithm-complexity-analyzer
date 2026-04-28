@@ -32,17 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateInputSizeLabel();
 
     // Group algorithms by category
-    /* Example output:
-        {
-            Sorting: [
-                { id: "1", name: "Bubble Sort", category: "Sorting" },
-                { id: "2", name: "Quick Sort", category: "Sorting" }
-            ],
-            Search: [
-                { id: "3", name: "Binary Search", category: "Search" }
-            ]
-        }
-    */
     const groupedAlgorithms = algorithms.reduce((accumulator, algorithm) => {
         if (!accumulator[algorithm.category]) {
             accumulator[algorithm.category] = [];
