@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Complexity Analyzer - History</title>
-  
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Lucide Icons -->
@@ -12,30 +13,42 @@
 
   <style>
     body {
-      background-color: #f8f9fa; /* from-slate-50 to-slate-100 equivalent */
+      background-color: #f8f9fa;
+      /* from-slate-50 to-slate-100 equivalent */
       min-height: 100vh;
     }
+
     .navbar {
       background-color: white;
       border-bottom: 1px solid #e2e8f0;
       box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     }
+
     .nav-link.active-link {
-      background-color: #eff6ff; /* blue-50 */
-      color: #1d4ed8; /* blue-700 */
+      background-color: #eff6ff;
+      /* blue-50 */
+      color: #1d4ed8;
+      /* blue-700 */
       border-radius: 0.5rem;
     }
+
     .nav-link {
-      color: #475569; /* slate-600 */
+      color: #475569;
+      /* slate-600 */
       border-radius: 0.5rem;
       transition: background-color 0.2s, color 0.2s;
     }
+
     .nav-link:hover:not(.active-link) {
-      background-color: #f1f5f9; /* slate-100 */
+      background-color: #f1f5f9;
+      /* slate-100 */
     }
+
     .icon-primary {
-      color: #2563eb; /* blue-600 */
+      color: #2563eb;
+      /* blue-600 */
     }
+
     .card {
       box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
       border: 1px solid #e2e8f0;
@@ -45,6 +58,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Root Layout Navbar -->
@@ -69,7 +83,7 @@
 
   <!-- Main View (History) -->
   <main class="container py-4 max-w-7xl">
-    
+
     <div id="emptyState" class="card d-none">
       <div class="card-body py-5 text-center text-muted">
         <i data-lucide="clock" style="width: 48px; height: 48px;" class="mx-auto mb-3 text-light-subtle"></i>
@@ -106,38 +120,43 @@
           <div id="noResults" class="text-center text-secondary py-5 d-none">
             <p>No results match your filters</p>
           </div>
-          
+
           <div id="tableContainer" class="table-responsive d-none">
             <table class="table table-hover align-middle mb-0">
               <thead class="border-bottom text-muted">
                 <tr>
                   <th scope="col" class="cursor-pointer" data-sort="algorithm">
                     <div class="d-flex align-items-center gap-1">
-                      Algorithm <i data-lucide="arrow-up-down" class="sort-icon d-none" style="width: 12px; height: 12px;"></i>
+                      Algorithm <i data-lucide="arrow-up-down" class="sort-icon d-none"
+                        style="width: 12px; height: 12px;"></i>
                     </div>
                   </th>
                   <th scope="col" class="text-center cursor-pointer" data-sort="size">
                     <div class="d-flex align-items-center justify-content-center gap-1">
                       <i data-lucide="hash" style="width: 16px; height: 16px;"></i>
-                      Input Size <i data-lucide="arrow-up-down" class="sort-icon d-none" style="width: 12px; height: 12px;"></i>
+                      Input Size <i data-lucide="arrow-up-down" class="sort-icon d-none"
+                        style="width: 12px; height: 12px;"></i>
                     </div>
                   </th>
                   <th scope="col" class="text-center cursor-pointer" data-sort="time">
                     <div class="d-flex align-items-center justify-content-center gap-1">
                       <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
-                      Execution Time <i data-lucide="arrow-up-down" class="sort-icon d-none" style="width: 12px; height: 12px;"></i>
+                      Execution Time <i data-lucide="arrow-up-down" class="sort-icon d-none"
+                        style="width: 12px; height: 12px;"></i>
                     </div>
                   </th>
                   <th scope="col" class="text-center cursor-pointer" data-sort="memory">
                     <div class="d-flex align-items-center justify-content-center gap-1">
                       <i data-lucide="hard-drive" style="width: 16px; height: 16px;"></i>
-                      Memory <i data-lucide="arrow-up-down" class="sort-icon d-none" style="width: 12px; height: 12px;"></i>
+                      Memory <i data-lucide="arrow-up-down" class="sort-icon d-none"
+                        style="width: 12px; height: 12px;"></i>
                     </div>
                   </th>
                   <th scope="col" class="text-center cursor-pointer" data-sort="date">
                     <div class="d-flex align-items-center justify-content-center gap-1">
                       <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
-                      Date <i data-lucide="arrow-up-down" class="sort-icon d-none" style="width: 12px; height: 12px;"></i>
+                      Date <i data-lucide="arrow-up-down" class="sort-icon d-none"
+                        style="width: 12px; height: 12px;"></i>
                     </div>
                   </th>
                   <th scope="col" class="text-center">Action</th>
@@ -161,4 +180,5 @@
     lucide.createIcons();
   </script>
 </body>
+
 </html>
