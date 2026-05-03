@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingIconNode.style.animation = 'spin 1s linear infinite';
         runText.textContent = 'Analyzing...';
 
+        // Add keyframes if missing
         const style = document.createElement('style');
         style.innerHTML = `@keyframes spin {
             from { transform: rotate(0deg); }
@@ -175,14 +176,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     executionTime: time,
                     memoryUsage: memory,
 
-                    // ── P0 ADDITION: all three asymptotic notation fields ────────────
+                    // all three asymptotic notation fields 
                     timeComplexity: algorithm.timeComplexity,   // Big-O  (worst-case)
                     thetaComplexity: algorithm.thetaComplexity,  // Big-Θ  (tight/avg)
                     omegaComplexity: algorithm.omegaComplexity,  // Big-Ω  (best-case)
 
                     spaceComplexity: algorithm.spaceComplexity,
 
-                    // ── P0 ADDITION: multi-point empirical data for growth chart ─────
+                    // multi-point empirical data for growth chart
                     growthData,
 
                     timestamp: Date.now(),
@@ -203,13 +204,4 @@ document.addEventListener('DOMContentLoaded', () => {
         updateRunButtonState();
 
     });
-
-    // Add keyframes for spinner if missing
-    /*const style = document.createElement('style');
-    style.innerHTML = `@keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }`;
-    document.head.appendChild(style);*/
-    
 });
