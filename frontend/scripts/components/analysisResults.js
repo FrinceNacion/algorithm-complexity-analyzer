@@ -2,23 +2,23 @@
 import { getTheoreticalValue } from '../algorithms.js';
 
 export function formatBytes(bytes) {
-  if (bytes < 1024)            return `${bytes.toFixed(0)} B`;
-  if (bytes < 1024 * 1024)     return `${(bytes / 1024).toFixed(2)} KB`;
+  if (bytes < 1024) return `${bytes.toFixed(0)} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
 // Chart instance references — kept module-level so they can be destroyed
 // before re-rendering to avoid Chart.js "canvas already in use" errors.
 let performanceChartInstance = null;
-let growthChartInstance      = null;
+let growthChartInstance = null;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // P0 ADDITION — Colour palette shared by both charts
 // Index 0 → first selected algorithm, Index 1 → second selected algorithm
 // ─────────────────────────────────────────────────────────────────────────────
 const PALETTE = [
-  { empirical: '#3b82f6', theoretical: 'rgba(59,130,246,0.35)', label: 'blue'   },
-  { empirical: '#ef4444', theoretical: 'rgba(239, 68, 68,0.35)', label: 'red'   },
+  { empirical: '#3b82f6', theoretical: 'rgba(59,130,246,0.35)', label: 'blue' },
+  { empirical: '#ef4444', theoretical: 'rgba(239, 68, 68,0.35)', label: 'red' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -47,51 +47,55 @@ function renderGrowthChart(results) {
   const primaryGrowth = results[0].growthData;
   if (!primaryGrowth || primaryGrowth.length === 0) return;
 
-  const labels = primaryGrowth.map((p) => p.size.toLocaleString());
+  // Use the result whose growthData has the largest final size for labels
+  const labelSource = results.reduce((best, r) =>
+    (r.growthData.at(-1)?.size ?? 0) > (best.growthData.at(-1)?.size ?? 0) ? r : best
+    , results[0]);
+  const labels = labelSource.growthData.map((p) => p.size.toLocaleString());
   const datasets = [];
 
   results.forEach((result, idx) => {
     if (!result.growthData || result.growthData.length === 0) return;
 
-    const color    = PALETTE[idx % PALETTE.length];
+    const color = PALETTE[idx % PALETTE.length];
     const empTimes = result.growthData.map((p) => parseFloat(p.time.toFixed(6)));
 
-    // ── Empirical dataset ──────────────────────────────────────────────────
+    // ── Empirical dataset ─────────c─────────────────────────────────────────
     datasets.push({
-      label:           `${result.algorithmName} — Empirical`,
-      data:            empTimes,
-      borderColor:     color.empirical,
+      label: `${result.algorithmName} — Empirical`,
+      data: empTimes,
+      borderColor: color.empirical,
       backgroundColor: color.empirical,
-      borderWidth:     2.5,
-      pointRadius:     4,
+      borderWidth: 2.5,
+      pointRadius: 4,
       pointHoverRadius: 6,
-      tension:         0.35,
-      fill:            false,
-      borderDash:      [],
+      tension: 0.35,
+      fill: false,
+      borderDash: [],
     });
 
     // ── Theoretical dataset (normalized) ──────────────────────────────────
     const rawTheory = result.growthData.map((p) =>
       getTheoreticalValue(result.timeComplexity, p.size)
     );
-    const lastEmp    = empTimes[empTimes.length - 1] || 1;
+    const lastEmp = empTimes[empTimes.length - 1] || 1;
     const lastTheory = rawTheory[rawTheory.length - 1] || 1;
-    const scale      = lastEmp / lastTheory;
+    const scale = lastEmp / lastTheory;
     const normTheory = rawTheory.map((v) =>
       parseFloat((v * scale).toFixed(6))
     );
 
     datasets.push({
-      label:           `${result.algorithmName} — Theoretical ${result.timeComplexity} (normalized)`,
-      data:            normTheory,
-      borderColor:     color.empirical,
+      label: `${result.algorithmName} — Theoretical ${result.timeComplexity} (normalized)`,
+      data: normTheory,
+      borderColor: color.empirical,
       backgroundColor: color.theoretical,
-      borderWidth:     2,
-      pointRadius:     3,
+      borderWidth: 2,
+      pointRadius: 3,
       pointHoverRadius: 5,
-      tension:         0.35,
-      fill:            false,
-      borderDash:      [6, 4],  // dashed line distinguishes theoretical from empirical
+      tension: 0.35,
+      fill: false,
+      borderDash: [6, 4],  // dashed line distinguishes theoretical from empirical
     });
   });
 
@@ -99,15 +103,15 @@ function renderGrowthChart(results) {
     type: 'line',
     data: { labels, datasets },
     options: {
-      responsive:          true,
+      responsive: true,
       maintainAspectRatio: false,
       interaction: {
-        mode:      'index',
+        mode: 'index',
         intersect: false,
       },
       plugins: {
         legend: {
-          display:  true,
+          display: true,
           position: 'top',
           labels: {
             usePointStyle: true,
@@ -115,14 +119,14 @@ function renderGrowthChart(results) {
             generateLabels(chart) {
               // Custom legend: show dashes for theoretical entries
               return chart.data.datasets.map((ds, i) => ({
-                text:            ds.label,
-                fillStyle:       ds.borderColor,
-                strokeStyle:     ds.borderColor,
-                lineWidth:       ds.borderWidth,
-                lineDash:        ds.borderDash,
-                hidden:          !chart.isDatasetVisible(i),
-                datasetIndex:    i,
-                pointStyle:      'line',
+                text: ds.label,
+                fillStyle: ds.borderColor,
+                strokeStyle: ds.borderColor,
+                lineWidth: ds.borderWidth,
+                lineDash: ds.borderDash,
+                hidden: !chart.isDatasetVisible(i),
+                datasetIndex: i,
+                pointStyle: 'line',
               }));
             },
           },
@@ -137,16 +141,16 @@ function renderGrowthChart(results) {
         x: {
           title: {
             display: true,
-            text:    'Input Size (n)',
-            font:    { size: 12 },
+            text: 'Input Size (n)',
+            font: { size: 12 },
           },
         },
         y: {
           beginAtZero: true,
           title: {
             display: true,
-            text:    'Time (ms)',
-            font:    { size: 12 },
+            text: 'Time (ms)',
+            font: { size: 12 },
           },
           ticks: {
             callback: (v) => `${v.toFixed(4)}`,
@@ -171,19 +175,19 @@ export function renderAnalysisResults(results) {
   const isComparison = results.length > 1;
 
   // Determine best/worst performers for badge labelling
-  let fastestResult     = results[0];
-  let slowestResult     = results[0];
-  let mostMemoryResult  = results[0];
+  let fastestResult = results[0];
+  let slowestResult = results[0];
+  let mostMemoryResult = results[0];
   let leastMemoryResult = results[0];
 
   results.forEach((result) => {
-    if (result.executionTime < fastestResult.executionTime)  fastestResult     = result;
-    if (result.executionTime > slowestResult.executionTime)  slowestResult     = result;
-    if (result.memoryUsage   > mostMemoryResult.memoryUsage) mostMemoryResult  = result;
-    if (result.memoryUsage   < leastMemoryResult.memoryUsage) leastMemoryResult = result;
+    if (result.executionTime < fastestResult.executionTime) fastestResult = result;
+    if (result.executionTime > slowestResult.executionTime) slowestResult = result;
+    if (result.memoryUsage > mostMemoryResult.memoryUsage) mostMemoryResult = result;
+    if (result.memoryUsage < leastMemoryResult.memoryUsage) leastMemoryResult = result;
   });
 
-  const speedDifference  = slowestResult.executionTime / fastestResult.executionTime;
+  const speedDifference = slowestResult.executionTime / fastestResult.executionTime;
   const memoryDifference = mostMemoryResult.memoryUsage / leastMemoryResult.memoryUsage;
 
   let html = `<div class="d-flex flex-column gap-4 mt-4">`;
@@ -284,11 +288,11 @@ export function renderAnalysisResults(results) {
             <div class="d-flex align-items-start justify-content-between">
               <h5 class="card-title fw-bold fs-5 mb-0">${result.algorithmName}</h5>
               ${isComparison && result.id === fastestResult.id
-                ? '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill">Fastest</span>'
-                : ''}
+        ? '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill">Fastest</span>'
+        : ''}
               ${isComparison && result.id === slowestResult.id
-                ? '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill">Slowest</span>'
-                : ''}
+        ? '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill">Slowest</span>'
+        : ''}
             </div>
           </div>
           <div class="card-body d-flex flex-column gap-3">
@@ -391,8 +395,8 @@ export function renderAnalysisResults(results) {
           <td class="py-2 px-3 text-end font-monospace small">${formatBytes(result.memoryUsage)}</td>
           <td class="py-2 px-3 text-end">
             ${relativeSpeed === 1
-              ? '<span class="text-success fw-semibold">Baseline</span>'
-              : `<span class="text-secondary">${relativeSpeed.toFixed(2)}× slower</span>`}
+          ? '<span class="text-success fw-semibold">Baseline</span>'
+          : `<span class="text-secondary">${relativeSpeed.toFixed(2)}× slower</span>`}
           </td>
           <td class="py-2 px-3">
             <span class="badge fw-normal border px-2 py-1"
@@ -446,14 +450,14 @@ export function renderAnalysisResults(results) {
       data: {
         labels: results.map((r) => r.algorithmName),
         datasets: [{
-          label:           'Execution Time (ms)',
-          data:            results.map((r) => parseFloat(r.executionTime.toFixed(4))),
+          label: 'Execution Time (ms)',
+          data: results.map((r) => parseFloat(r.executionTime.toFixed(4))),
           backgroundColor: results.map((_, i) => PALETTE[i % PALETTE.length].empirical),
-          borderRadius:    4,
+          borderRadius: 4,
         }],
       },
       options: {
-        responsive:          true,
+        responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: { display: true, position: 'top' },
