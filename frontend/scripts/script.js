@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateInputSizeLabel();
             return;
         }
-        if (!isNaN(val) && val >= 1) {
+        if (!isNaN(val) && val >= 35) {
             inputSize = val;
             updateInputSizeLabel();
         }
