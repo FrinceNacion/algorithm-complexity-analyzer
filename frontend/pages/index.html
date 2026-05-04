@@ -32,7 +32,7 @@
                 </div>
                 
                 <div class="form-actions">
-                    <a href="#" class="forgot-password">Forgot password?</a>
+                    <a href="#" class="forgot-password" id="showForgotBtn">Forgot password?</a>
                 </div>
                 
                 <button type="submit" class="btn-login" id="loginBtn">Sign In</button>
@@ -76,6 +76,37 @@
             
             <div class="register-prompt">
                 <p>Already have an account? <a href="#" id="showLoginBtn">Sign In</a></p>
+            </div>
+        </div>
+
+        <!-- Forgot Password View -->
+        <div id="forgotPasswordView" style="display: none;">
+            <div class="login-header">
+                <h1>Reset Password</h1>
+                <p>Enter your email and a new password.</p>
+            </div>
+            
+            <form id="forgotPasswordForm" class="login-form">
+                <div class="input-group">
+                    <label for="forgotEmail">Email</label>
+                    <input type="email" id="forgotEmail" name="email" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="forgotNewPassword">New Password</label>
+                    <input type="password" id="forgotNewPassword" name="newPassword" placeholder="••••••••" required minlength="8">
+                </div>
+
+                <div class="input-group">
+                    <label for="forgotConfirmPassword">Confirm New Password</label>
+                    <input type="password" id="forgotConfirmPassword" name="confirmPassword" placeholder="••••••••" required minlength="8">
+                </div>
+                
+                <button type="submit" class="btn-login" id="forgotSubmitBtn">Reset Password</button>
+            </form>
+            
+            <div class="register-prompt">
+                <p>Remember your password? <a href="#" id="showLoginFromForgotBtn">Sign In</a></p>
             </div>
         </div>
     </div>

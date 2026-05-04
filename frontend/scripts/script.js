@@ -3,11 +3,15 @@ import { saveToHistory } from './storage.js';
 import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
 import { renderAnalysisResults } from './components/analysisResults.js';
 import { algorithms, collectGrowthData } from './algorithms.js';
+import { initializeProfile } from './components/profile.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
     // user authenticates by checking user_id in current session, if not, return to index (login/register)
     const user = authenticateUser();
+    
+    // Initialize profile module
+    initializeProfile(user);
 
     const algorithmsContainer = document.getElementById("algorithmsContainer");
     const useManualInputToggle = document.getElementById("useManualInput");
