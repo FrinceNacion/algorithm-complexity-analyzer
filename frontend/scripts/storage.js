@@ -1,4 +1,5 @@
 import { postJson } from './utils.js';
+import { showToast } from './components/modal.js';
 
 const STORAGE_KEY = "algorithm-analyzer-history";
 const SAVE_ENDPOINT = "http://localhost/algorithm-complexity-analyzer/backend/save.php";
@@ -13,7 +14,6 @@ export async function saveToHistory(result) {
     history.length = 100;
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-  console.log(result);
   // Also save to backend
   try {
     await postJson(SAVE_ENDPOINT, {
@@ -23,7 +23,7 @@ export async function saveToHistory(result) {
       space: result.memoryUsage
     });
   } catch (error) {
-    console.error("Failed to save to backend:", error);
+    showToast({ message: 'Failed to save result to server. Your result is stored locally.', type: 'warning' });
   }
 }
 
@@ -48,7 +48,7 @@ export async function getBackendHistory() {
     }
     return [];
   } catch (error) {
-    console.error("Failed to fetch backend history:", error);
+    showToast({ message: 'Failed to load history from server. Please check your connection.', type: 'danger' });
     return [];
   }
 }

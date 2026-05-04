@@ -27,7 +27,6 @@ export async function authenticateUser() {
     if (!data.success) {
         window.location.href = 'index.html';
     } else {
-        console.log("Authenticated user:", data.user);
         return data.user;
     }
 }

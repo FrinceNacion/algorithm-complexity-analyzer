@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const data = await postJson(LOGINENDPOINT, { email, password });
-            alert(`Welcome back, ${data.user.name}!`);
             window.location.href = 'main.html';
         } catch (error) {
             // Check for the specific "unverified" error from backend

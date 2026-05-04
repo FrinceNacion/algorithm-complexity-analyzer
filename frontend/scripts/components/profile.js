@@ -1,4 +1,5 @@
 import { postJson } from '../utils.js';
+import { showConfirmModal, showToast } from './modal.js';
 
 export async function initializeProfile(userPromise) {
 
@@ -144,13 +145,21 @@ export async function initializeProfile(userPromise) {
 
     const logoutBtn = document.getElementById('logoutBtn');
     logoutBtn.addEventListener('click', async () => {
+        const confirmed = await showConfirmModal({
+            title: 'Log Out',
+            message: 'Are you sure you want to log out of your account?',
+            confirmLabel: 'Log Out',
+            cancelLabel: 'Cancel',
+            danger: true
+        });
+        if (!confirmed) return;
         try {
             const endpoint = "http://localhost/algorithm-complexity-analyzer/backend/logout.php";
             await postJson(endpoint, {});
             window.location.href = 'index.html';
         } catch (error) {
-            console.error('Logout failed:', error);
-            window.location.href = 'index.html';
+            showToast({ message: 'Logout encountered an error. Redirecting...', type: 'warning' });
+            setTimeout(() => { window.location.href = 'index.html'; }, 2000);
         }
     });
 }
