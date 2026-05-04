@@ -109,6 +109,22 @@
                 <p>Remember your password? <a href="#" id="showLoginFromForgotBtn">Sign In</a></p>
             </div>
         </div>
+
+        <!-- Verification Pending View -->
+        <div id="verificationPendingView" style="display: none;">
+            <div class="login-header" style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 0.75rem;">📧</div>
+                <h1>Check Your Inbox</h1>
+                <p>A verification link has been sent to <strong id="pendingEmail"></strong>. Please click the link in the email to activate your account.</p>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.75rem;">Didn't receive it? Check your spam folder, or</p>
+                <button class="btn-login" id="resendVerificationBtn">Resend Verification Email</button>
+            </div>
+            <div class="register-prompt">
+                <p>Already verified? <a href="#" id="showLoginFromVerifyBtn">Sign In</a></p>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="../scripts/login.js"></script>
