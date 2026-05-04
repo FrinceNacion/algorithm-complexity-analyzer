@@ -1,5 +1,6 @@
 // P0 ADDITION: import theoretical value utility from algorithms module
 import { getTheoreticalValue } from '../algorithms.js';
+import { exportCSV, exportPDF } from '../export.js';
 
 export function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes.toFixed(0)} B`;
@@ -13,7 +14,7 @@ let performanceChartInstance = null;
 let growthChartInstance = null;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// P0 ADDITION — Colour palette shared by both charts
+// Colour palette shared by both charts
 // Index 0 → first selected algorithm, Index 1 → second selected algorithm
 // ─────────────────────────────────────────────────────────────────────────────
 const PALETTE = [
@@ -22,7 +23,7 @@ const PALETTE = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// P0 ADDITION — Theoretical vs. Empirical Growth Chart
+// Theoretical vs. Empirical Growth Chart
 //
 // For each result that contains growthData (multi-point empirical samples),
 // this function renders a Chart.js line chart with:
@@ -191,6 +192,23 @@ export function renderAnalysisResults(results) {
   const memoryDifference = mostMemoryResult.memoryUsage / leastMemoryResult.memoryUsage;
 
   let html = `<div class="d-flex flex-column gap-4 mt-4">`;
+
+  // ── Export Header ─────────────────────────────────────────────────────────
+  html += `
+    <div class="d-flex justify-content-between align-items-center">
+      <h3 class="mb-0 fw-bold">Analysis Results</h3>
+      <div class="d-flex gap-2">
+        <button id="exportMainCsvBtn" class="btn btn-outline-success d-flex align-items-center gap-2">
+          <i data-lucide="file-spreadsheet" style="width: 16px; height: 16px;"></i>
+          Export CSV
+        </button>
+        <button id="exportMainPdfBtn" class="btn btn-outline-danger d-flex align-items-center gap-2">
+          <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+          Export PDF
+        </button>
+      </div>
+    </div>
+  `;
 
   // ── Comparison Summary Card (2 algorithms only) ───────────────────────────
   if (isComparison) {

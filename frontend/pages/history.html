@@ -102,10 +102,20 @@
           <h1 class="h3 fw-bold text-dark mb-1">Analysis History</h1>
           <p class="text-secondary mb-0">View all past algorithm analysis results</p>
         </div>
-        <button id="clearHistoryBtn" class="btn btn-danger d-flex align-items-center gap-2">
-          <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
-          Clear History
-        </button>
+        <div class="d-flex gap-2">
+            <button id="exportCsvBtn" class="btn btn-outline-success d-flex align-items-center gap-2">
+                <i data-lucide="file-spreadsheet" style="width: 16px; height: 16px;"></i>
+                Export CSV
+            </button>
+            <button id="exportPdfBtn" class="btn btn-outline-danger d-flex align-items-center gap-2">
+                <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+                Export PDF
+            </button>
+            <button id="clearHistoryBtn" class="btn btn-danger d-flex align-items-center gap-2">
+              <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+              Clear History
+            </button>
+        </div>
       </div>
 
       <div class="card">
@@ -177,8 +187,13 @@
 
   </main>
 
-  <!-- Needs algorithms for the dropdown, and storage to get data -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- jsPDF and AutoTable for PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
   <script type="module" src="../scripts/history.js"></script>
   <script>
     // Initialize icons that are not dynamically injected

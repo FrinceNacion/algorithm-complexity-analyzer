@@ -3,6 +3,7 @@ import { algorithms } from "./algorithms.js";
 import { formatBytes } from "./components/analysisResults.js";
 import { authenticateUser, postJson } from './utils.js';
 import { initializeProfile } from './components/profile.js';
+import { exportCSV, exportPDF } from './export.js';
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -20,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const noResults = document.getElementById("noResults");
     const tableContainer = document.getElementById("tableContainer");
     const historyTableBody = document.getElementById("historyTableBody");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+    const exportPdfBtn = document.getElementById("exportPdfBtn");
 
     let historyData = [];
     let filteredHistory = [];
@@ -145,6 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
             clearHistory();
             loadHistory();
         }
+    });
+
+    exportCsvBtn.addEventListener('click', () => {
+        exportCSV(filteredHistory, 'aca-history');
+    });
+
+    exportPdfBtn.addEventListener('click', () => {
+        exportPDF(filteredHistory, 'aca-history');
     });
 
     algorithmFilter.addEventListener('change', (e) => {
