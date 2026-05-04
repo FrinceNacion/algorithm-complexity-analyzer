@@ -27,27 +27,40 @@ if (!$input) {
     exit();
 }
 
-$email = $input['email'] ?? null;
+$email    = $input['email']    ?? null;
 $password = $input['password'] ?? null;
 
-$stmt = $pdo->prepare("SELECT user_id, name, email, role, password FROM users WHERE email = :email AND deleted_at IS NULL");
+$stmt = $pdo->prepare("SELECT user_id, name, email, role, password, is_verified FROM users WHERE email = :email AND deleted_at IS NULL");
 $stmt->bindParam(':email', $email);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && password_verify($password, $user['password'])) {
-    $_SESSION['user_id'] = $user['user_id'];
 
+    // Block login if email is not verified
+    if (!$user['is_verified']) {
+        http_response_code(403);
+        echo json_encode([
+            'success'    => false,
+            'error'      => 'unverified',
+            'email'      => $email,
+            'message'    => 'Your email address has not been verified yet. Please check your inbox or request a new verification link.'
+        ]);
+        exit();
+    }
+
+    $_SESSION['user_id'] = $user['user_id'];
     session_regenerate_id(true);
 
     unset($user['user_id']);
     unset($user['password']);
+    unset($user['is_verified']); // don't expose this field to the client
 
     $_SESSION['user'] = $user;
 
     echo json_encode([
         'success' => true,
-        'user' => $user
+        'user'    => $user
     ]);
 } else {
     http_response_code(401);
