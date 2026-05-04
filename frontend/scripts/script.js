@@ -4,12 +4,13 @@ import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
 import { renderAnalysisResults } from './components/analysisResults.js';
 import { algorithms, collectGrowthData } from './algorithms.js';
 import { initializeProfile } from './components/profile.js';
+import { exportCSV, exportPDF } from './export.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
     // user authenticates by checking user_id in current session, if not, return to index (login/register)
     const user = authenticateUser();
-    
+
     // Initialize profile module
     initializeProfile(user);
 
@@ -154,9 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingIconNode.style.animation = '';
         runIconNode.classList.remove('d-none');
         loadingIconNode.classList.add('d-none');
-        
+
         runText.textContent = 'Run Analysis';
-        
+
 
         const newResults = [];
 
@@ -203,6 +204,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Render results here
         renderAnalysisResults(newResults);
+
+        const exportMainCsvBtn = document.getElementById("exportMainCsvBtn");
+        const exportMainPdfBtn = document.getElementById("exportMainPdfBtn");
+
+        exportMainCsvBtn.addEventListener('click', () => {
+            exportCSV(newResults, 'aca-results');
+        });
+
+        exportMainPdfBtn.addEventListener('click', () => {
+            exportPDF(newResults, 'aca-results');
+        });
 
         isAnalyzing = false;
         updateRunButtonState();
