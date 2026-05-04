@@ -1,5 +1,6 @@
 import { authenticateUser, postJson } from './utils.js';
 import { saveToHistory } from './storage.js';
+import { showToast } from './components/modal.js';
 import { renderAlgorithmsCheckbox } from './components/algorithmCheckbox.js';
 import { renderAnalysisResults } from './components/analysisResults.js';
 import { algorithms, collectGrowthData } from './algorithms.js';
@@ -198,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Save to history here
                 saveToHistory(result);
             } catch (error) {
-                console.error(`Error running ${algorithm.name}:`, error);
+                showToast({ message: `Error running ${algorithm.name}: ${error.message}`, type: 'danger' });
             }
         }
 
