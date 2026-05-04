@@ -4,6 +4,7 @@ import { formatBytes } from "./components/analysisResults.js";
 import { authenticateUser, postJson } from './utils.js';
 import { initializeProfile } from './components/profile.js';
 import { exportCSV, exportPDF } from './export.js';
+import { showConfirmModal, showToast } from './components/modal.js';
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -137,17 +138,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function handleDeleteItem(id) {
+    async function handleDeleteItem(id) {
+        const confirmed = await showConfirmModal({
+            title: 'Delete Record',
+            message: 'Are you sure you want to delete this analysis record? This action cannot be undone.',
+            confirmLabel: 'Delete',
+            cancelLabel: 'Cancel',
+            danger: true
+        });
+        if (!confirmed) return;
         deleteFromHistory(id);
+        showToast({ message: 'Record deleted successfully.', type: 'success' });
         loadHistory();
     }
 
     // Event Listeners
-    clearHistoryBtn.addEventListener('click', () => {
-        if (confirm("Are you sure you want to clear all history?")) {
-            clearHistory();
-            loadHistory();
-        }
+    clearHistoryBtn.addEventListener('click', async () => {
+        const confirmed = await showConfirmModal({
+            title: 'Clear All History',
+            message: 'Are you sure you want to permanently delete all analysis history? This cannot be undone.',
+            confirmLabel: 'Clear All',
+            cancelLabel: 'Cancel',
+            danger: true
+        });
+        if (!confirmed) return;
+        clearHistory();
+        showToast({ message: 'All history has been cleared.', type: 'success' });
+        loadHistory();
     });
 
     exportCsvBtn.addEventListener('click', () => {
