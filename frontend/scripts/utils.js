@@ -1,3 +1,5 @@
+import { ENDPOINTS } from './api.js';
+
 // POST request with JSON data and error handling
 export async function postJson(endpoint, payload) {
     const response = await fetch(endpoint, {
@@ -20,8 +22,7 @@ export async function postJson(endpoint, payload) {
 
 // Authenticate user and return user ID
 export async function authenticateUser() {
-    const getUserEndpoint = "http://localhost/algorithm-complexity-analyzer/backend/get_user.php";
-    const response = await fetch(getUserEndpoint, { method: "POST", credentials: "include" });
+    const response = await fetch(ENDPOINTS.GET_USER, { method: "POST", credentials: "include" });
     const data = await response.json().catch(() => ({ error: 'Invalid server response' }));
 
     if (!data.success) {

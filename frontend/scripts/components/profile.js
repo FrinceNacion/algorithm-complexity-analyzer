@@ -1,4 +1,6 @@
 import { postJson } from '../utils.js';
+import { ENDPOINTS } from '../api.js';
+
 import { showConfirmModal, showToast } from './modal.js';
 
 export async function initializeProfile(userPromise) {
@@ -116,8 +118,7 @@ export async function initializeProfile(userPromise) {
         changePasswordBtn.textContent = 'Updating...';
 
         try {
-            const endpoint = "http://localhost/algorithm-complexity-analyzer/backend/change_password.php";
-            const response = await postJson(endpoint, {
+            const response = await postJson(ENDPOINTS.CHANGE_PASSWORD, {
                 currentPassword,
                 newPassword,
                 confirmPassword
@@ -154,8 +155,7 @@ export async function initializeProfile(userPromise) {
         });
         if (!confirmed) return;
         try {
-            const endpoint = "http://localhost/algorithm-complexity-analyzer/backend/logout.php";
-            await postJson(endpoint, {});
+            await postJson(ENDPOINTS.LOGOUT, {});
             window.location.href = 'index.html';
         } catch (error) {
             showToast({ message: 'Logout encountered an error. Redirecting...', type: 'warning' });
