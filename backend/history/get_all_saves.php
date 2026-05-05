@@ -21,10 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 
 // Include authentication script
-require_once 'authenticate.php';
+require_once __DIR__ . '/../utilities/authenticate.php';
 
 // Database connection
-require_once 'connect_db.php';
+require_once __DIR__ . '/../utilities/connect_db.php';
 
 // Fetch all results for authenticated user
 try {
