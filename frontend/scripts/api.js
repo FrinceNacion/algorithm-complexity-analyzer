@@ -18,6 +18,8 @@ export const ENDPOINTS = {
     // History
     SAVE_RESULT: `${API_BASE}/history/save.php`,
     GET_HISTORY: `${API_BASE}/history/get_all_saves.php`,
+    DELETE_ITEM: `${API_BASE}/history/delete_item.php`,
+    CLEAR_HISTORY: `${API_BASE}/history/clear_all.php`,
 
     // Password
     CHANGE_PASSWORD: `${API_BASE}/password/change_password.php`,
