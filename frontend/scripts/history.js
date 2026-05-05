@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
             danger: true
         });
         if (!confirmed) return;
-        deleteFromHistory(id);
+        await deleteFromHistory(id);
         showToast({ message: 'Record deleted successfully.', type: 'success' });
         loadHistory();
     }
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
             danger: true
         });
         if (!confirmed) return;
-        clearHistory();
+        await clearHistory();
         showToast({ message: 'All history has been cleared.', type: 'success' });
         loadHistory();
     });

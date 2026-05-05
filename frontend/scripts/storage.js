@@ -70,12 +70,25 @@ export async function getCombinedHistory() {
   });
 }
 
-export function clearHistory() {
+export async function clearHistory() {
   localStorage.removeItem(STORAGE_KEY);
+  try {
+    await postJson(ENDPOINTS.CLEAR_HISTORY, {});
+  } catch (error) {
+    console.error('Failed to clear history on server:', error);
+    showToast({ message: 'History cleared locally, but server update failed.', type: 'warning' });
+  }
 }
 
-export function deleteFromHistory(id) {
+export async function deleteFromHistory(id) {
   const history = getHistory();
   const filtered = history.filter(item => item.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+
+  try {
+    await postJson(ENDPOINTS.DELETE_ITEM, { id });
+  } catch (error) {
+    console.error('Failed to delete item from server:', error);
+    showToast({ message: 'Item removed locally, but server update failed.', type: 'warning' });
+  }
 }
