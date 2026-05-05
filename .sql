@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 CREATE DATABASE IF NOT EXISTS aco_db;
 USE aco_db;
 
