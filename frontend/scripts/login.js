@@ -1,4 +1,6 @@
 import { postJson } from './utils.js';
+import { ENDPOINTS } from './api.js';
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // ── Views ──────────────────────────────────────────────────────────────────
@@ -25,10 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const pendingEmailEl          = document.getElementById('pendingEmail');
 
     // ── Endpoints ──────────────────────────────────────────────────────────────
-    const LOGINENDPOINT    = 'http://localhost/algorithm-complexity-analyzer/backend/login.php';
-    const REGISTERENDPOINT = 'http://localhost/algorithm-complexity-analyzer/backend/register.php';
-    const FORGOTENDPOINT   = 'http://localhost/algorithm-complexity-analyzer/backend/forgot_password.php';
-    const RESENDENDPOINT   = 'http://localhost/algorithm-complexity-analyzer/backend/resend_verification.php';
 
     // ── View helpers ───────────────────────────────────────────────────────────
     function hideAllViews() {
@@ -97,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonState(loginBtn, 'Signing in…');
 
         try {
-            const data = await postJson(LOGINENDPOINT, { email, password });
+            const data = await postJson(ENDPOINTS.LOGIN, { email, password });
             window.location.href = 'main.html';
         } catch (error) {
             // Check for the specific "unverified" error from backend
@@ -138,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonState(registerSubmitBtn, 'Creating account…');
 
         try {
-            const data = await postJson(REGISTERENDPOINT, { name, email, password });
+            const data = await postJson(ENDPOINTS.REGISTER, { name, email, password });
             registerForm.reset();
 
             if (data.mailError) {
@@ -168,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonState(resendVerificationBtn, 'Sending…');
 
         try {
-            const data = await postJson(RESENDENDPOINT, { email });
+            const data = await postJson(ENDPOINTS.RESEND_VERIFICATION, { email });
             alert(data.message || 'Verification email sent!');
         } catch (error) {
             alert(error.message);
@@ -204,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonState(forgotSubmitBtn, 'Resetting…');
 
         try {
-            const data = await postJson(FORGOTENDPOINT, { email, newPassword, confirmPassword });
+            const data = await postJson(ENDPOINTS.FORGOT_PASSWORD, { email, newPassword, confirmPassword });
             alert(data.message || 'Password reset successfully! Please sign in.');
             forgotPasswordForm.reset();
             hideAllViews();

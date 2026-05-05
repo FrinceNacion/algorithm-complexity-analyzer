@@ -1,9 +1,9 @@
 import { postJson } from './utils.js';
+import { ENDPOINTS } from './api.js';
+
 import { showToast } from './components/modal.js';
 
 const STORAGE_KEY = "algorithm-analyzer-history";
-const SAVE_ENDPOINT = "http://localhost/algorithm-complexity-analyzer/backend/save.php";
-const GET_ALL_SAVES_ENDPOINT = "http://localhost/algorithm-complexity-analyzer/backend/get_all_saves.php";
 
 export async function saveToHistory(result) {
   // Save to local storage
@@ -16,7 +16,7 @@ export async function saveToHistory(result) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
   // Also save to backend
   try {
-    await postJson(SAVE_ENDPOINT, {
+    await postJson(ENDPOINTS.SAVE_RESULT, {
       size: result.inputSize,
       time: result.executionTime,
       algorithm: result.algorithmName,
@@ -34,7 +34,7 @@ export function getHistory() {
 
 export async function getBackendHistory() {
   try {
-    const data = await postJson(GET_ALL_SAVES_ENDPOINT, {});
+    const data = await postJson(ENDPOINTS.GET_HISTORY, {});
     if (data.success && data.results) {
       return data.results.map(row => ({
         id: `backend-${row.id}`,

@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-require_once 'connect_db.php';
+require_once __DIR__ . '/../utilities/connect_db.php';
 
 $token = $_GET['token'] ?? null;
 

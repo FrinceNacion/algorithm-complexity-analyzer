@@ -17,7 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-require_once 'connect_db.php';
+require_once __DIR__ . '/../utilities/connect_db.php';
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, "error" => "Unauthorized"]);
+    exit();
+}
 
 $input = json_decode(file_get_contents("php://input"), true);
 
@@ -27,11 +34,11 @@ if (!$input) {
     exit();
 }
 
-$email = $input['email'] ?? null;
+$currentPassword = $input['currentPassword'] ?? null;
 $newPassword = $input['newPassword'] ?? null;
 $confirmPassword = $input['confirmPassword'] ?? null;
 
-if (!$email || !$newPassword || !$confirmPassword) {
+if (!$currentPassword || !$newPassword || !$confirmPassword) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'All fields are required.']);
     exit();
@@ -49,15 +56,15 @@ if (strlen($newPassword) < 8) {
     exit();
 }
 
-// Verify email exists
-$stmt = $pdo->prepare("SELECT user_id FROM users WHERE email = :email AND deleted_at IS NULL");
-$stmt->bindParam(':email', $email);
+// Get user from DB to verify current password
+$stmt = $pdo->prepare("SELECT password FROM users WHERE user_id = :user_id AND deleted_at IS NULL");
+$stmt->bindParam(':user_id', $_SESSION['user_id']);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$user) {
-    http_response_code(404);
-    echo json_encode(['success' => false, 'error' => 'No account found with that email address.']);
+if (!$user || !password_verify($currentPassword, $user['password'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Incorrect current password.']);
     exit();
 }
 
@@ -65,11 +72,11 @@ if (!$user) {
 $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
 $updateStmt = $pdo->prepare("UPDATE users SET password = :password WHERE user_id = :user_id");
 $updateStmt->bindParam(':password', $hashed_password);
-$updateStmt->bindParam(':user_id', $user['user_id']);
+$updateStmt->bindParam(':user_id', $_SESSION['user_id']);
 
 if ($updateStmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Password reset successfully.']);
+    echo json_encode(['success' => true, 'message' => 'Password updated successfully.']);
 } else {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Failed to reset password.']);
+    echo json_encode(['success' => false, 'error' => 'Failed to update password.']);
 }

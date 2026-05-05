@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-require_once 'connect_db.php';
-require_once 'send_verification.php'; // imports sendVerificationEmail()
+require_once __DIR__ . '/../utilities/connect_db.php';
+require_once __DIR__ . '/../email/send_verification.php'; // imports sendVerificationEmail()
 
 $input = json_decode(file_get_contents("php://input"), true);
 

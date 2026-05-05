@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-require_once 'authenticate.php';
+require_once __DIR__ . '/../utilities/authenticate.php';
 
-require_once 'connect_db.php';
+require_once __DIR__ . '/../utilities/connect_db.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 
