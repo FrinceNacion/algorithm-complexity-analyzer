@@ -5,6 +5,52 @@ import { showToast } from './components/modal.js';
 
 const STORAGE_KEY = "algorithm-analyzer-history";
 
+const MOCK_HISTORY = [
+  {
+    id: 'mock-1-bubble-sort',
+    algorithmName: 'Bubble Sort',
+    inputSize: 1000,
+    executionTime: 2.4512,
+    memoryUsage: 24,
+    timeComplexity: 'O(n²)',
+    thetaComplexity: 'Θ(n²)',
+    omegaComplexity: 'Ω(n)',
+    spaceComplexity: 'O(1)',
+    timestamp: Date.now() - 3600 * 1000 * 2, // 2 hours ago
+  },
+  {
+    id: 'mock-2-merge-sort',
+    algorithmName: 'Merge Sort',
+    inputSize: 5000,
+    executionTime: 0.8245,
+    memoryUsage: 40024,
+    timeComplexity: 'O(n log n)',
+    thetaComplexity: 'Θ(n log n)',
+    omegaComplexity: 'Ω(n log n)',
+    spaceComplexity: 'O(n)',
+    timestamp: Date.now() - 3600 * 1000 * 4, // 4 hours ago
+  },
+  {
+    id: 'mock-3-quick-sort',
+    algorithmName: 'Quick Sort',
+    inputSize: 10000,
+    executionTime: 1.1204,
+    memoryUsage: 80120,
+    timeComplexity: 'O(n²)',
+    thetaComplexity: 'Θ(n log n)',
+    omegaComplexity: 'Ω(n log n)',
+    spaceComplexity: 'O(log n)',
+    timestamp: Date.now() - 3600 * 1000 * 24, // 1 day ago
+  }
+];
+
+function initializeHistoryDefaults() {
+  if (!localStorage.getItem(STORAGE_KEY)) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(MOCK_HISTORY));
+  }
+}
+initializeHistoryDefaults();
+
 export async function saveToHistory(result) {
   // Save to local storage
   const history = getHistory();
@@ -14,7 +60,8 @@ export async function saveToHistory(result) {
     history.length = 100;
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-  // Also save to backend
+  /*
+  // Comment out backend integrations for static site compatibility
   try {
     await postJson(ENDPOINTS.SAVE_RESULT, {
       size: result.inputSize,
@@ -25,6 +72,7 @@ export async function saveToHistory(result) {
   } catch (error) {
     showToast({ message: 'Failed to save result to server. Your result is stored locally.', type: 'warning' });
   }
+  */
 }
 
 export function getHistory() {
@@ -33,6 +81,8 @@ export function getHistory() {
 }
 
 export async function getBackendHistory() {
+  /*
+  // Comment out backend integrations for static site compatibility
   try {
     const data = await postJson(ENDPOINTS.GET_HISTORY, {});
     if (data.success && data.results) {
@@ -51,6 +101,10 @@ export async function getBackendHistory() {
     showToast({ message: 'Failed to load history from server. Please check your connection.', type: 'danger' });
     return [];
   }
+  */
+
+  // Return local storage history as the source of truth for static site
+  return getHistory();
 }
 
 export async function getCombinedHistory() {
@@ -72,12 +126,15 @@ export async function getCombinedHistory() {
 
 export async function clearHistory() {
   localStorage.removeItem(STORAGE_KEY);
+  /*
+  // Comment out backend integrations for static site compatibility
   try {
     await postJson(ENDPOINTS.CLEAR_HISTORY, {});
   } catch (error) {
     console.error('Failed to clear history on server:', error);
     showToast({ message: 'History cleared locally, but server update failed.', type: 'warning' });
   }
+  */
 }
 
 export async function deleteFromHistory(id) {
@@ -85,10 +142,13 @@ export async function deleteFromHistory(id) {
   const filtered = history.filter(item => item.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
 
+  /*
+  // Comment out backend integrations for static site compatibility
   try {
     await postJson(ENDPOINTS.DELETE_ITEM, { id });
   } catch (error) {
     console.error('Failed to delete item from server:', error);
     showToast({ message: 'Item removed locally, but server update failed.', type: 'warning' });
   }
+  */
 }

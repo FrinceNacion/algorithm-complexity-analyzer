@@ -8,11 +8,9 @@ import { showConfirmModal, showToast } from './components/modal.js';
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // user authenticates by checking user_id in current session, if not, return to index (login/register)
-    const user = authenticateUser();
-
-    // Initialize profile module
-    initializeProfile(user);
+    // user authentication and profile module disabled for auth-free frontend version
+    // const user = authenticateUser();
+    // initializeProfile(user);
 
     const emptyState = document.getElementById("emptyState");
     const historyContent = document.getElementById("historyContent");

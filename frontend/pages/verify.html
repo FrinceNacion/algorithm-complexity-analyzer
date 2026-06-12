@@ -136,7 +136,7 @@
                 <div class="icon-wrap success">✅</div>
                 <h1>Email Verified!</h1>
                 <p>Your email address has been successfully verified. You can now sign in to your account.</p>
-                <a href="http://127.0.0.1:3000/frontend/pages/index.html" class="btn-verify">Sign In</a>
+                <a href="login.html" class="btn-verify">Sign In</a>
             </div>
 
             <!-- State: Error (hidden initially) -->
@@ -144,7 +144,7 @@
                 <div class="icon-wrap error">❌</div>
                 <h1>Verification Failed</h1>
                 <p id="errorMessage">The link is invalid or has expired.</p>
-                <a href="http://127.0.0.1:3000/frontend/pages/index.html" class="btn-verify">Back to Sign In</a>
+                <a href="login.html" class="btn-verify">Back to Sign In</a>
                 <br>
                 <button class="btn-resend" id="resendFromVerifyBtn">Resend Verification Email</button>
             </div>
@@ -165,6 +165,8 @@
             }
 
             try {
+                /*
+                // Comment out backend integrations for static site compatibility
                 const res = await fetch(`${VERIFY_ENDPOINT}?token=${encodeURIComponent(token)}`);
                 const data = await res.json();
 
@@ -173,6 +175,24 @@
                 } else {
                     showError(data.error || 'Verification failed. Please try again.');
                 }
+                */
+
+                // Local Storage Simulation
+                const usersJson = localStorage.getItem('algorithm-analyzer-users');
+                if (usersJson) {
+                    const users = JSON.parse(usersJson);
+                    let verifiedAny = false;
+                    users.forEach(u => {
+                        if (!u.verified) {
+                            u.verified = true;
+                            verifiedAny = true;
+                        }
+                    });
+                    if (verifiedAny) {
+                        localStorage.setItem('algorithm-analyzer-users', JSON.stringify(users));
+                    }
+                }
+                showSuccess();
             } catch (e) {
                 showError('A network error occurred. Please check your connection and try again.');
             }
@@ -199,6 +219,8 @@
             btn.textContent = 'Sending…';
 
             try {
+                /*
+                // Comment out backend integrations for static site compatibility
                 const res = await fetch(RESEND_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -206,6 +228,20 @@
                 });
                 const data = await res.json();
                 alert(data.message || data.error || 'Done.');
+                */
+
+                // Local Storage Simulation
+                const usersJson = localStorage.getItem('algorithm-analyzer-users');
+                let userExists = false;
+                if (usersJson) {
+                    const users = JSON.parse(usersJson);
+                    userExists = users.some(u => u.email === email);
+                }
+                if (userExists) {
+                    alert(`Simulated: A verification link has been resent to ${email}.`);
+                } else {
+                    alert('Email address not found.');
+                }
             } catch (e) {
                 alert('Network error. Please try again.');
             } finally {
